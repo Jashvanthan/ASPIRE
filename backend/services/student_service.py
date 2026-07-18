@@ -249,14 +249,37 @@ class StudentService:
             Student.face_embedding.isnot(None)
         ).count()
         
-        # Get today's attendance count
+        # Get today's attendance count and dept breakdown
         from backend.models.attendance import Attendance
+        from sqlalchemy import func
         from datetime import datetime, timezone
+        
         today_date = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+        
+        today_present = 0
+        dept_breakdown = {}
+        
         try:
             today_present = Attendance.query.filter_by(date=today_date).count()
+            
+            # 1. Initialize all existing departments with 0
+            all_depts = db.session.query(Student.department).distinct().all()
+            dept_breakdown = {d[0]: 0 for d in all_depts if d[0]}
+            
+            # 2. Get today's present counts per department
+            dept_counts = db.session.query(
+                Attendance.department,
+                func.count(Attendance.id)
+            ).filter(
+                Attendance.date == today_date,
+                Attendance.attendance_status == "Present"
+            ).group_by(Attendance.department).all()
+            
+            for dept, count in dept_counts:
+                dept_breakdown[dept] = count
+                
         except Exception:
-            today_present = 0
+            pass
             
         return {
             "total_students": total,
@@ -264,5 +287,6 @@ class StudentService:
             "pending_face_capture": total - with_embedding,
             "today_present": today_present,
             "today_absent": max(0, with_embedding - today_present),
-            "attendance_rate": f"{(today_present / with_embedding * 100):.1f}%" if with_embedding > 0 else "0%"
+            "attendance_rate": f"{(today_present / with_embedding * 100):.1f}%" if with_embedding > 0 else "0%",
+            "dept_breakdown": dept_breakdown
         }

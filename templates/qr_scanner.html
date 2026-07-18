@@ -282,6 +282,9 @@ function showStudentResult(s) {
     } else {
       document.getElementById('rStatus').innerHTML = '<span class="badge bg-warning text-dark">Absent</span>';
       document.getElementById('markAttendanceBtn').disabled = false;
+      
+      // Auto-mark attendance
+      setTimeout(() => markAttendance(), 300);
     }
   }).catch(() => {
     document.getElementById('rStatus').innerHTML = '<span class="badge bg-secondary">Unknown</span>';

@@ -307,14 +307,7 @@ async function loadStudents(page = 1) {
 
     document.getElementById('tableLoading').classList.add('d-none');
 
-    if (total === 0) {
-      document.getElementById('tableEmpty').classList.remove('d-none');
-      return;
-    }
-
-    renderTable(allStudents);
-
-    // Update stats cards dynamically
+    // Update stats cards dynamically (always update even if 0 students)
     const statsRes  = await fetch('/api/stats');
     const statsData = await statsRes.json();
     const statTotal = document.getElementById('statTotal');
@@ -327,6 +320,20 @@ async function loadStudents(page = 1) {
     if (statPend)  statPend.textContent  = statsData.pending_face_capture;
     if (statPres)  statPres.textContent  = statsData.today_present;
     if (statRate)  statRate.textContent  = statsData.attendance_rate;
+
+    if (typeof updateDashCharts === 'function') {
+      updateDashCharts(statsData);
+    }
+
+    if (total === 0) {
+      document.getElementById('tableEmpty').classList.remove('d-none');
+      document.getElementById('tableFooter').classList.add('d-none');
+      const tbody = document.getElementById('studentsTableBody');
+      if (tbody) tbody.innerHTML = '';
+      return;
+    }
+
+    renderTable(allStudents);
 
     // Pagination
     document.getElementById('tableCount').textContent =
@@ -586,18 +593,5 @@ function updateDashCharts(statsData) {
 // Init charts on page load
 initDashCharts();
 
-// Hook into existing loadStudents to also update charts
-const _origLoadStudents = loadStudents;
-window.loadStudents = async function(page = 1) {
-  await _origLoadStudents(page);
-  // Re-fetch stats and update charts
-  try {
-    const sr = await fetch('/api/stats');
-    if (sr.ok) {
-      const sd = await sr.json();
-      updateDashCharts(sd);
-    }
-  } catch(e) { /* silent */ }
-};
 </script>
 {% endblock %}
