@@ -1,0 +1,313 @@
+{% extends "base.html" %}
+
+{% block title %}Register Student{% endblock %}
+{% block breadcrumb %}Register Student{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/register.css') }}" />
+{% endblock %}
+
+{% block content %}
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     STUDENT REGISTRATION PAGE
+═══════════════════════════════════════════════════════════════════════════ -->
+
+<!-- Page Header -->
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Register Student</h1>
+    <p class="page-subtitle">Complete the form and capture a face to register a new student</p>
+  </div>
+</div>
+
+<!-- ─── Two-column Layout ─────────────────────────────────────────────────── -->
+<div class="reg-layout">
+
+  <!-- ── LEFT: Registration Form ──────────────────────────────────────────── -->
+  <div class="reg-form-col">
+    <div class="glass-card form-card">
+
+      <!-- Card Header -->
+      <div class="form-card-header">
+        <div class="form-card-icon">
+          <i class="bi bi-person-badge-fill"></i>
+        </div>
+        <div>
+          <h2 class="form-card-title">Student Details</h2>
+          <p class="form-card-subtitle">Fill in all required fields</p>
+        </div>
+      </div>
+
+      <!-- Form -->
+      <form id="registrationForm" novalidate autocomplete="off">
+
+        <!-- Row 1: Student ID + Full Name -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="studentId" class="form-label">
+              Student ID <span class="required-star">*</span>
+            </label>
+            <div class="input-wrapper">
+              <i class="bi bi-person-badge input-icon"></i>
+              <input
+                type="text"
+                id="studentId"
+                name="student_id"
+                class="form-control-custom"
+                placeholder="e.g. CS2024001"
+                maxlength="30"
+                required
+              />
+            </div>
+            <span class="field-error" id="err-student_id"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="fullName" class="form-label">
+              Full Name <span class="required-star">*</span>
+            </label>
+            <div class="input-wrapper">
+              <i class="bi bi-person input-icon"></i>
+              <input
+                type="text"
+                id="fullName"
+                name="full_name"
+                class="form-control-custom"
+                placeholder="e.g. John Doe"
+                maxlength="150"
+                required
+              />
+            </div>
+            <span class="field-error" id="err-full_name"></span>
+          </div>
+        </div>
+
+        <!-- Row 2: Department -->
+        <div class="form-group">
+          <label for="department" class="form-label">
+            Department <span class="required-star">*</span>
+          </label>
+          <div class="input-wrapper">
+            <i class="bi bi-building input-icon"></i>
+            <select id="department" name="department" class="form-control-custom form-select-custom" required>
+              <option value="" disabled selected>Select Department</option>
+              <option value="Computer Science">Computer Science</option>
+              <option value="Information Technology">Information Technology</option>
+              <option value="Electronics & Communication">Electronics &amp; Communication</option>
+              <option value="Electrical Engineering">Electrical Engineering</option>
+              <option value="Mechanical Engineering">Mechanical Engineering</option>
+              <option value="Civil Engineering">Civil Engineering</option>
+              <option value="Mathematics">Mathematics</option>
+              <option value="Physics">Physics</option>
+              <option value="Chemistry">Chemistry</option>
+              <option value="Business Administration">Business Administration</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <span class="field-error" id="err-department"></span>
+        </div>
+
+        <!-- Row 3: Year + Section -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="year" class="form-label">
+              Year <span class="required-star">*</span>
+            </label>
+            <div class="input-wrapper">
+              <i class="bi bi-mortarboard-fill input-icon"></i>
+              <select id="year" name="year" class="form-control-custom form-select-custom" required>
+                <option value="" disabled selected>Select Year</option>
+                <option value="1">1st Year</option>
+                <option value="2">2nd Year</option>
+                <option value="3">3rd Year</option>
+                <option value="4">4th Year</option>
+              </select>
+            </div>
+            <span class="field-error" id="err-year"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="section" class="form-label">
+              Section <span class="required-star">*</span>
+            </label>
+            <div class="input-wrapper">
+              <i class="bi bi-grid input-icon"></i>
+              <select id="section" name="section" class="form-control-custom form-select-custom" required>
+                <option value="" disabled selected>Select Section</option>
+                <option value="A">Section A</option>
+                <option value="B">Section B</option>
+                <option value="C">Section C</option>
+                <option value="D">Section D</option>
+                <option value="E">Section E</option>
+              </select>
+            </div>
+            <span class="field-error" id="err-section"></span>
+          </div>
+        </div>
+
+        <!-- Row 4: Email + Phone -->
+        <div class="form-row-2">
+          <div class="form-group">
+            <label for="email" class="form-label">
+              Email <span class="required-star">*</span>
+            </label>
+            <div class="input-wrapper">
+              <i class="bi bi-envelope-fill input-icon"></i>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="form-control-custom"
+                placeholder="student@college.edu"
+                required
+              />
+            </div>
+            <span class="field-error" id="err-email"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="phoneNumber" class="form-label">
+              Phone <span class="optional-label">(Optional)</span>
+            </label>
+            <div class="input-wrapper">
+              <i class="bi bi-telephone-fill input-icon"></i>
+              <input
+                type="tel"
+                id="phoneNumber"
+                name="phone_number"
+                class="form-control-custom"
+                placeholder="+91 98765 43210"
+              />
+            </div>
+            <span class="field-error" id="err-phone_number"></span>
+          </div>
+        </div>
+
+        <!-- Form Action Buttons -->
+        <div class="form-actions">
+          <button type="button" class="btn-outline-action" id="resetFormBtn">
+            <i class="bi bi-arrow-counterclockwise me-2"></i>Reset
+          </button>
+          <button type="submit" class="btn-primary-gradient" id="registerBtn" disabled>
+            <span class="btn-text">
+              <i class="bi bi-person-check-fill me-2"></i>Register Student
+            </span>
+            <span class="btn-spinner d-none">
+              <span class="spinner-border spinner-border-sm me-2"></span>Saving…
+            </span>
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div><!-- /reg-form-col -->
+
+  <!-- ── RIGHT: Webcam Capture Panel ──────────────────────────────────────── -->
+  <div class="reg-webcam-col">
+    <div class="glass-card webcam-card">
+
+      <!-- Card Header -->
+      <div class="form-card-header">
+        <div class="form-card-icon form-card-icon--purple">
+          <i class="bi bi-camera-video-fill"></i>
+        </div>
+        <div>
+          <h2 class="form-card-title">Face Capture</h2>
+          <p class="form-card-subtitle">Capture {{ capture_count }} clear face images</p>
+        </div>
+      </div>
+
+      <!-- Webcam Preview -->
+      <div class="webcam-preview-container" id="webcamPreviewContainer">
+        <!-- Placeholder (shown when camera is off) -->
+        <div class="webcam-placeholder" id="webcamPlaceholder">
+          <div class="placeholder-icon">
+            <i class="bi bi-camera-video-off-fill"></i>
+          </div>
+          <p class="placeholder-text">Camera is off</p>
+          <p class="placeholder-hint">Fill in the Student ID above, then click "Open Camera"</p>
+        </div>
+
+        <!-- Live stream via getUserMedia -->
+        <video
+          id="webcamFeed"
+          class="webcam-feed d-none"
+          autoplay
+          playsinline
+          muted
+        ></video>
+
+        <!-- Capture overlay badges -->
+        <div class="webcam-overlay d-none" id="webcamOverlay">
+          <div class="overlay-badge">
+            <i class="bi bi-circle-fill blink-dot"></i>
+            <span>LIVE</span>
+          </div>
+          <div class="face-count-badge" id="faceCountBadge">
+            <i class="bi bi-person-bounding-box"></i>
+            <span id="faceCountText">–</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Capture Progress -->
+      <div class="capture-progress-section" id="captureProgressSection" style="display:none;">
+        <div class="progress-header">
+          <span class="progress-label">
+            <i class="bi bi-images me-1"></i>Captured Frames
+          </span>
+          <span class="progress-count" id="progressCount">0 / {{ capture_count }}</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+        </div>
+        <div class="progress-dots" id="progressDots">
+          {% for i in range(capture_count) %}
+          <div class="progress-dot" id="dot-{{ i }}"></div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Status Messages -->
+      <div class="capture-status-area" id="captureStatusArea"></div>
+
+      <!-- Webcam Buttons -->
+      <div class="webcam-actions">
+        <button type="button" class="btn-webcam btn-open-cam" id="openCamBtn">
+          <i class="bi bi-camera-video-fill me-2"></i>Open Camera
+        </button>
+        <button type="button" class="btn-webcam btn-capture d-none" id="captureBtn">
+          <i class="bi bi-camera-fill me-2"></i>Capture Face
+        </button>
+        <button type="button" class="btn-webcam btn-retake d-none" id="retakeBtn">
+          <i class="bi bi-arrow-repeat me-2"></i>Retake
+        </button>
+        <button type="button" class="btn-webcam btn-close-cam d-none" id="closeCamBtn">
+          <i class="bi bi-x-circle-fill me-2"></i>Close Camera
+        </button>
+      </div>
+
+    </div><!-- /webcam-card -->
+
+    <!-- Registration Result Card (shown after success) -->
+    <div class="glass-card result-card d-none" id="resultCard">
+      <div class="result-icon success-icon">
+        <i class="bi bi-check-circle-fill"></i>
+      </div>
+      <h3 class="result-title" id="resultTitle">Registration Complete!</h3>
+      <p class="result-message" id="resultMessage"></p>
+      <div class="result-actions">
+        <button type="button" class="btn-outline-action" id="registerAnotherBtn">
+          <i class="bi bi-plus-circle me-2"></i>Register Another
+        </button>
+      </div>
+    </div>
+
+  </div><!-- /reg-webcam-col -->
+</div><!-- /reg-layout -->
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/register.js') }}"></script>
+{% endblock %}

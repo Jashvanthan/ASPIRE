@@ -1,0 +1,414 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+{% block breadcrumb %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- ═══════════════════════════════════════════════════════════════════════════
+     DASHBOARD PAGE
+═══════════════════════════════════════════════════════════════════════════ -->
+
+<!-- Page Header -->
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Dashboard</h1>
+    <p class="page-subtitle">Welcome to SmartAttend – AI Smart Attendance System</p>
+  </div>
+  <a href="{{ url_for('student.register') }}" class="btn-primary-gradient">
+    <i class="bi bi-person-plus-fill me-2"></i>Register Student
+  </a>
+</div>
+
+<!-- ─── Stats Cards ────────────────────────────────────────────────────────── -->
+<div class="stats-grid">
+
+  <div class="stat-card stat-card--primary">
+    <div class="stat-card-icon">
+      <i class="bi bi-people-fill"></i>
+    </div>
+    <div class="stat-card-body">
+      <span class="stat-value" id="statTotal">{{ stats.total_students }}</span>
+      <span class="stat-label">Total Students</span>
+    </div>
+    <div class="stat-card-glow"></div>
+  </div>
+
+  <div class="stat-card stat-card--success">
+    <div class="stat-card-icon">
+      <i class="bi bi-patch-check-fill"></i>
+    </div>
+    <div class="stat-card-body">
+      <span class="stat-value" id="statFaceReg">{{ stats.registered_with_face }}</span>
+      <span class="stat-label">Face Registered</span>
+    </div>
+    <div class="stat-card-glow"></div>
+  </div>
+
+  <div class="stat-card stat-card--warning">
+    <div class="stat-card-icon">
+      <i class="bi bi-hourglass-split"></i>
+    </div>
+    <div class="stat-card-body">
+      <span class="stat-value" id="statPending">{{ stats.pending_face_capture }}</span>
+      <span class="stat-label">Pending Capture</span>
+    </div>
+    <div class="stat-card-glow"></div>
+  </div>
+
+  <div class="stat-card stat-card--info">
+    <div class="stat-card-icon">
+      <i class="bi bi-calendar-check-fill"></i>
+    </div>
+    <div class="stat-card-body">
+      <span class="stat-value" id="statTodayPresent">{{ stats.today_present }}</span>
+      <span class="stat-label">Present Today</span>
+    </div>
+    <div class="stat-card-glow"></div>
+  </div>
+
+  <div class="stat-card stat-card--primary">
+    <div class="stat-card-icon">
+      <i class="bi bi-graph-up-arrow"></i>
+    </div>
+    <div class="stat-card-body">
+      <span class="stat-value" id="statAttRate">{{ stats.attendance_rate }}</span>
+      <span class="stat-label">Attendance Rate</span>
+    </div>
+    <div class="stat-card-glow"></div>
+  </div>
+
+</div>
+
+<!-- ─── Quick Actions ─────────────────────────────────────────────────────── -->
+<div class="section-header mt-4">
+  <h2 class="section-title">Quick Actions</h2>
+</div>
+
+<div class="quick-actions-grid">
+  <a href="{{ url_for('student.register') }}" class="quick-action-card">
+    <div class="qa-icon qa-icon--blue">
+      <i class="bi bi-person-plus-fill"></i>
+    </div>
+    <div class="qa-body">
+      <h3 class="qa-title">Register Student</h3>
+      <p class="qa-desc">Add a new student with face capture</p>
+    </div>
+    <i class="bi bi-arrow-right qa-arrow"></i>
+  </a>
+
+  <a href="{{ url_for('attendance.attendance_page') }}" class="quick-action-card">
+    <div class="qa-icon qa-icon--green">
+      <i class="bi bi-camera-video-fill"></i>
+    </div>
+    <div class="qa-body">
+      <h3 class="qa-title">Mark Attendance</h3>
+      <p class="qa-desc">Real-time face recognition attendance</p>
+    </div>
+    <i class="bi bi-arrow-right qa-arrow"></i>
+  </a>
+
+  <div class="quick-action-card disabled" title="Available in Phase 4">
+    <div class="qa-icon qa-icon--purple">
+      <i class="bi bi-file-earmark-bar-graph-fill"></i>
+    </div>
+    <div class="qa-body">
+      <h3 class="qa-title">View Reports</h3>
+      <p class="qa-desc">Attendance analytics and exports</p>
+    </div>
+    <span class="qa-badge">Phase 4</span>
+  </div>
+</div>
+
+<!-- ─── System Info Panel ─────────────────────────────────────────────────── -->
+<div class="section-header mt-4">
+  <h2 class="section-title">System Information</h2>
+</div>
+
+<div class="info-panel glass-card">
+  <div class="info-row">
+    <div class="info-item">
+      <i class="bi bi-server info-icon text-primary"></i>
+      <div>
+        <span class="info-label">Backend</span>
+        <span class="info-value">Python Flask + SQLAlchemy</span>
+      </div>
+    </div>
+    <div class="info-item">
+      <i class="bi bi-database-fill info-icon text-success"></i>
+      <div>
+        <span class="info-label">Database</span>
+        <span class="info-value">SQLite (smartattend.db)</span>
+      </div>
+    </div>
+    <div class="info-item">
+      <i class="bi bi-eye-fill info-icon text-warning"></i>
+      <div>
+        <span class="info-label">Face Recognition</span>
+        <span class="info-value">InsightFace (buffalo_l)</span>
+      </div>
+    </div>
+    <div class="info-item">
+      <i class="bi bi-camera-fill info-icon text-info"></i>
+      <div>
+        <span class="info-label">Webcam</span>
+        <span class="info-value">Browser getUserMedia API</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── Registered Students Table ────────────────────────────────────────── -->
+<div class="section-header mt-4 d-flex align-items-center justify-content-between">
+  <h2 class="section-title">Registered Students</h2>
+  <div class="d-flex align-items-center gap-3">
+    <div class="table-search-wrapper">
+      <i class="bi bi-search table-search-icon"></i>
+      <input type="text" id="studentSearch" class="table-search-input" placeholder="Search students…" />
+    </div>
+    <select id="statusFilter" class="form-select" style="width: auto; background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid rgba(255, 255, 255, 0.1);">
+      <option value="all">All Students</option>
+      <option value="present">Present Today</option>
+      <option value="absent">Absent Today</option>
+    </select>
+    <button class="btn-refresh" id="refreshBtn" title="Refresh list">
+      <i class="bi bi-arrow-clockwise"></i>
+    </button>
+  </div>
+</div>
+
+<div class="glass-card students-table-card">
+  <!-- Loading state -->
+  <div class="table-loading" id="tableLoading">
+    <div class="spinner-border-custom"></div>
+    <span>Loading students…</span>
+  </div>
+
+  <!-- Empty state -->
+  <div class="table-empty d-none" id="tableEmpty">
+    <i class="bi bi-person-x-fill table-empty-icon"></i>
+    <p class="table-empty-text">No students registered yet.</p>
+    <a href="/register" class="btn-primary-gradient mt-2">
+      <i class="bi bi-person-plus-fill me-2"></i>Register First Student
+    </a>
+  </div>
+
+  <!-- Table -->
+  <div class="table-wrapper d-none" id="tableWrapper">
+    <table class="students-table" id="studentsTable">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Student ID</th>
+          <th>Full Name</th>
+          <th>Department</th>
+          <th>Year</th>
+          <th>Section</th>
+          <th>Email</th>
+          <th>Face</th>
+          <th>Today's Status</th>
+          <th>Registered</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="studentsTableBody">
+        <!-- Populated by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="table-footer d-none" id="tableFooter">
+    <span class="table-count" id="tableCount"></span>
+    <div class="pagination-btns">
+      <button class="page-btn" id="prevPageBtn" disabled>
+        <i class="bi bi-chevron-left"></i> Prev
+      </button>
+      <span class="page-indicator" id="pageIndicator">1 / 1</span>
+      <button class="page-btn" id="nextPageBtn">
+        Next <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+/* ─── Students Table Logic ──────────────────────────────────────────────── */
+let currentPage = 1;
+const perPage   = 10;
+let searchTerm  = '';
+let statusFilter = 'all';
+let allStudents = [];
+
+async function loadStudents(page = 1) {
+  document.getElementById('tableLoading').classList.remove('d-none');
+  document.getElementById('tableEmpty').classList.add('d-none');
+  document.getElementById('tableWrapper').classList.add('d-none');
+  document.getElementById('tableFooter').classList.add('d-none');
+
+  try {
+    const res  = await fetch(`/api/students?page=${page}&per_page=${perPage}`);
+    const data = await res.json();
+
+    allStudents  = data.students || [];
+    currentPage  = data.page    || 1;
+    const pages  = data.pages   || 1;
+    const total  = data.total   || 0;
+
+    document.getElementById('tableLoading').classList.add('d-none');
+
+    if (total === 0) {
+      document.getElementById('tableEmpty').classList.remove('d-none');
+      return;
+    }
+
+    renderTable(allStudents);
+
+    // Update stats cards dynamically
+    const statsRes  = await fetch('/api/stats');
+    const statsData = await statsRes.json();
+    const statTotal = document.getElementById('statTotal');
+    const statFace  = document.getElementById('statFaceReg');
+    const statPend  = document.getElementById('statPending');
+    const statPres  = document.getElementById('statTodayPresent');
+    const statRate  = document.getElementById('statAttRate');
+    if (statTotal) statTotal.textContent = statsData.total_students;
+    if (statFace)  statFace.textContent  = statsData.registered_with_face;
+    if (statPend)  statPend.textContent  = statsData.pending_face_capture;
+    if (statPres)  statPres.textContent  = statsData.today_present;
+    if (statRate)  statRate.textContent  = statsData.attendance_rate;
+
+    // Pagination
+    document.getElementById('tableCount').textContent =
+      `Showing ${allStudents.length} of ${total} students`;
+    document.getElementById('pageIndicator').textContent = `${currentPage} / ${pages}`;
+    document.getElementById('prevPageBtn').disabled = currentPage <= 1;
+    document.getElementById('nextPageBtn').disabled = currentPage >= pages;
+    document.getElementById('tableFooter').classList.remove('d-none');
+
+  } catch (err) {
+    document.getElementById('tableLoading').classList.add('d-none');
+    console.error('Failed to load students:', err);
+  }
+}
+
+function renderTable(students) {
+  const tbody = document.getElementById('studentsTableBody');
+  tbody.innerHTML = '';
+
+  let filtered = students;
+  
+  if (statusFilter === 'present') {
+    filtered = filtered.filter(s => s.today_status === 'Present');
+  } else if (statusFilter === 'absent') {
+    filtered = filtered.filter(s => s.today_status === 'Absent');
+  }
+
+  if (searchTerm) {
+    filtered = filtered.filter(s =>
+        s.student_id.toLowerCase().includes(searchTerm) ||
+        s.full_name.toLowerCase().includes(searchTerm)  ||
+        s.department.toLowerCase().includes(searchTerm) ||
+        s.email.toLowerCase().includes(searchTerm));
+  }
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="9" class="table-no-match">No students match your search.</td></tr>`;
+    document.getElementById('tableWrapper').classList.remove('d-none');
+    return;
+  }
+
+  filtered.forEach((s, idx) => {
+    const date = s.registered_date
+      ? new Date(s.registered_date).toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' })
+      : '—';
+
+    const faceBadge = s.has_embedding
+      ? `<span class="badge-face badge-face--yes"><i class="bi bi-check-circle-fill me-1"></i>Done</span>`
+      : `<span class="badge-face badge-face--no"><i class="bi bi-clock me-1"></i>Pending</span>`;
+
+    const row = document.createElement('tr');
+    row.innerHTML = `
+      <td class="table-num">${(currentPage - 1) * perPage + idx + 1}</td>
+      <td><span class="student-id-chip">${esc(s.student_id)}</span></td>
+      <td class="student-name">${esc(s.full_name)}</td>
+      <td class="text-muted-cell">${esc(s.department)}</td>
+      <td class="text-center">Year ${s.year}</td>
+      <td class="text-center"><span class="section-chip">${esc(s.section)}</span></td>
+      <td class="text-muted-cell">${esc(s.email)}</td>
+      <td>${faceBadge}</td>
+      <td>
+        ${s.today_status === 'Present' 
+          ? `<span class="badge-face badge-face--yes" title="Marked present at ${s.today_time}"><i class="bi bi-check-circle-fill me-1"></i>Present</span> <br><small class="text-muted">${s.today_time}</small>`
+          : `<span class="badge-face badge-face--no"><i class="bi bi-x-circle-fill me-1"></i>Absent</span>`}
+      </td>
+      <td class="text-muted-cell">${date}</td>
+      <td>
+        <button class="btn btn-sm btn-outline-danger" onclick="deleteStudent('${s.student_id}')" title="Delete Student">
+          <i class="bi bi-trash"></i>
+        </button>
+      </td>
+    `;
+    tbody.appendChild(row);
+  });
+
+  document.getElementById('tableWrapper').classList.remove('d-none');
+}
+
+function esc(s) {
+  const d = document.createElement('div');
+  d.textContent = s || '';
+  return d.innerHTML;
+}
+
+// Search
+document.getElementById('studentSearch').addEventListener('input', (e) => {
+  searchTerm = e.target.value.trim().toLowerCase();
+  renderTable(allStudents);
+});
+
+// Filter
+document.getElementById('statusFilter').addEventListener('change', (e) => {
+  statusFilter = e.target.value;
+  renderTable(allStudents);
+});
+
+// Pagination
+document.getElementById('prevPageBtn').addEventListener('click', () => {
+  if (currentPage > 1) loadStudents(currentPage - 1);
+});
+document.getElementById('nextPageBtn').addEventListener('click', () => {
+  loadStudents(currentPage + 1);
+});
+
+// Refresh
+document.getElementById('refreshBtn').addEventListener('click', () => {
+  loadStudents(currentPage);
+});
+
+// Delete Student
+async function deleteStudent(studentId) {
+  if (!confirm(`Are you sure you want to delete student '${studentId}'? This will delete all their face data.`)) {
+    return;
+  }
+  try {
+    const res = await fetch(`/api/students/${studentId}`, { method: 'DELETE' });
+    const data = await res.json();
+    if (res.ok) {
+      window.SmartAttend?.success('Deleted', data.message || 'Student deleted');
+      loadStudents(currentPage);
+    } else {
+      window.SmartAttend?.error('Error', data.error || 'Failed to delete student');
+    }
+  } catch (err) {
+    console.error('Delete error:', err);
+    window.SmartAttend?.error('Error', 'Failed to delete student');
+  }
+}
+
+// Initial load
+loadStudents(1);
+</script>
+{% endblock %}

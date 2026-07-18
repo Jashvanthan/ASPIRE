@@ -1,0 +1,253 @@
+/* ==========================================================================
+   SmartAttend – Students Table Styles (appended to main.css)
+   ========================================================================== */
+
+/* ─── Table Search & Refresh ─────────────────────────────────────────────── */
+.table-search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.table-search-icon {
+  position: absolute;
+  left: 12px;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  pointer-events: none;
+}
+.table-search-input {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-pill);
+  padding: 8px 16px 8px 34px;
+  color: var(--text-primary);
+  font-size: 0.82rem;
+  width: 220px;
+  outline: none;
+  transition: all var(--duration) var(--ease);
+  font-family: 'Inter', sans-serif;
+}
+.table-search-input::placeholder { color: var(--text-muted); }
+.table-search-input:focus {
+  border-color: var(--brand-primary);
+  background: rgba(99,102,241,0.08);
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+}
+
+.btn-refresh {
+  width: 36px; height: 36px;
+  border-radius: var(--r-sm);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all var(--duration) var(--ease);
+}
+.btn-refresh:hover {
+  color: var(--brand-primary);
+  border-color: var(--brand-primary);
+  background: rgba(99,102,241,0.12);
+  transform: rotate(90deg);
+}
+
+/* ─── Table Card ─────────────────────────────────────────────────────────── */
+.students-table-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+/* ─── Loading State ──────────────────────────────────────────────────────── */
+.table-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 48px;
+  color: var(--text-muted);
+  font-size: 0.875rem;
+}
+
+.spinner-border-custom {
+  width: 26px; height: 26px;
+  border: 3px solid rgba(99,102,241,0.2);
+  border-top-color: var(--brand-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ─── Empty State ────────────────────────────────────────────────────────── */
+.table-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 56px 24px;
+  color: var(--text-muted);
+}
+.table-empty-icon { font-size: 3rem; opacity: 0.35; }
+.table-empty-text { font-size: 0.9rem; font-weight: 500; }
+
+/* ─── Table ──────────────────────────────────────────────────────────────── */
+.table-wrapper { overflow-x: auto; }
+
+.students-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+
+.students-table thead tr {
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.students-table th {
+  padding: 14px 16px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+  text-align: left;
+}
+
+.students-table tbody tr {
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  transition: background var(--duration-fast) var(--ease);
+}
+.students-table tbody tr:hover {
+  background: rgba(99,102,241,0.05);
+}
+.students-table tbody tr:last-child { border-bottom: none; }
+
+.students-table td {
+  padding: 13px 16px;
+  color: var(--text-primary);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.table-num {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 500;
+  width: 40px;
+}
+
+.student-id-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  background: rgba(99,102,241,0.12);
+  color: var(--brand-primary);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  border: 1px solid rgba(99,102,241,0.2);
+}
+
+.student-name {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.text-muted-cell { color: var(--text-muted); }
+
+.section-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: rgba(168,85,247,0.12);
+  color: var(--brand-accent);
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 1px solid rgba(168,85,247,0.2);
+}
+
+/* Face Badges */
+.badge-face {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: var(--r-pill);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+.badge-face--yes {
+  background: rgba(34,197,94,0.12);
+  color: var(--brand-success);
+  border: 1px solid rgba(34,197,94,0.25);
+}
+.badge-face--no {
+  background: rgba(245,158,11,0.12);
+  color: var(--brand-warning);
+  border: 1px solid rgba(245,158,11,0.25);
+}
+
+.table-no-match {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 32px !important;
+  font-size: 0.85rem;
+}
+
+/* ─── Table Footer / Pagination ──────────────────────────────────────────── */
+.table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-top: 1px solid var(--glass-border);
+  background: rgba(255,255,255,0.02);
+}
+
+.table-count {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.pagination-btns {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.page-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: var(--r-sm);
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--duration) var(--ease);
+  font-family: 'Inter', sans-serif;
+}
+.page-btn:hover:not(:disabled) {
+  border-color: var(--brand-primary);
+  color: var(--brand-primary);
+  background: rgba(99,102,241,0.1);
+}
+.page-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.page-indicator {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  min-width: 50px;
+  text-align: center;
+}

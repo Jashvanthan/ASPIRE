@@ -1,0 +1,279 @@
+/* ==========================================================================
+   SmartAttend – Security Dashboard Styles
+   ========================================================================== */
+
+.security-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* ─── Stat Cards ─────────────────────────────────────────────────────────── */
+
+.stat-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.bg-info-subtle    { background: rgba(56, 189, 248, 0.12); }
+.bg-success-subtle { background: rgba(34, 197, 94, 0.12); }
+.bg-danger-subtle  { background: rgba(239, 68, 68, 0.12); }
+.bg-warning-subtle { background: rgba(245, 158, 11, 0.12); }
+
+.stat-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--text-primary);
+}
+
+/* ─── Section Titles ─────────────────────────────────────────────────────── */
+
+.section-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding-bottom: 12px;
+    margin-bottom: 16px;
+}
+
+/* ─── Spoof Type Breakdown ───────────────────────────────────────────────── */
+
+.spoof-type-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.spoof-type-row:last-child {
+    border-bottom: none;
+}
+
+.spoof-type-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.spoof-type-count {
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+/* ─── Settings Form ──────────────────────────────────────────────────────── */
+
+.settings-form {
+    padding: 4px 0;
+}
+
+.setting-row {
+    margin-bottom: 16px;
+}
+
+.setting-row label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.setting-input-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.setting-input-group .form-range {
+    flex: 1;
+    accent-color: var(--brand-primary);
+}
+
+.setting-value {
+    min-width: 42px;
+    text-align: right;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--brand-primary);
+    font-family: 'Inter', monospace;
+}
+
+/* ─── Alerts Feed ────────────────────────────────────────────────────────── */
+
+.alerts-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.alert-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 14px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    border-left: 3px solid rgba(239, 68, 68, 0.6);
+    transition: background 0.2s;
+}
+
+.alert-row:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.alert-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.alert-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.alert-title {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--text-primary);
+}
+
+.alert-meta {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* ─── Decision Badges ────────────────────────────────────────────────────── */
+
+.decision-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    flex-shrink: 0;
+}
+
+.decision-badge.accepted {
+    background: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+    border: 1px solid rgba(34, 197, 94, 0.3);
+}
+
+.decision-badge.rejected {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* ─── Security Log Table ─────────────────────────────────────────────────── */
+
+.security-table {
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+}
+
+.security-table thead th {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 10px 8px;
+}
+
+.security-table tbody td {
+    padding: 10px 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+    vertical-align: middle;
+}
+
+.security-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+/* ─── Filter Dropdowns ───────────────────────────────────────────────────── */
+
+.security-filter {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-primary);
+    border-radius: 8px;
+    font-size: 0.82rem;
+}
+
+.security-filter:focus {
+    border-color: var(--brand-primary);
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
+.security-filter option {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+/* ─── Badge Custom (reused from attendance) ──────────────────────────────── */
+
+.badge-custom {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 12px;
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    border-radius: 20px;
+    color: var(--brand-primary);
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+
+/* ─── Responsive ─────────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+    .stat-card {
+        padding: 16px;
+    }
+    .stat-value {
+        font-size: 1.4rem;
+    }
+    .alert-meta {
+        font-size: 0.72rem;
+    }
+}

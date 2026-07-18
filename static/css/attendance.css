@@ -1,0 +1,69 @@
+/* ==========================================================================
+   SmartAttend – Attendance Module Styles
+   ========================================================================== */
+
+.attendance-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.controls-card {
+    padding: 20px 24px;
+}
+
+.feed-card {
+    padding: 0; /* Remove padding to let video go edge-to-edge if wanted, or keep padding and constrain video */
+    overflow: hidden;
+}
+
+.feed-header {
+    padding: 20px 24px 0 24px;
+}
+
+.badge-custom {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    background: rgba(99,102,241,0.1);
+    border: 1px solid rgba(99,102,241,0.25);
+    border-radius: var(--r-pill);
+    color: var(--brand-primary);
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.video-container {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+    border-radius: var(--r-md);
+    overflow: hidden;
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.video-placeholder {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.02);
+    z-index: 10;
+}
+
+/* 
+  The display canvas sits on top of everything inside video-container.
+  It shows both the raw video frame and the overlaid bounding boxes.
+*/
+#displayCanvas {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    display: block;
+    z-index: 20;
+}

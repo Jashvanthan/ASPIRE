@@ -1,0 +1,3 @@
+# Temporary face images captured during registration sessions.
+# Images are organized by session UUID subdirectories.
+# These can be deleted after embedding generation.

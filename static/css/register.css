@@ -1,0 +1,385 @@
+/* ==========================================================================
+   SmartAttend – Registration Page Styles
+   ========================================================================== */
+
+/* ─── Two-column Layout ──────────────────────────────────────────────────── */
+.reg-layout {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 1100px) {
+  .reg-layout { grid-template-columns: 1fr; }
+}
+
+/* ─── Form Card ──────────────────────────────────────────────────────────── */
+.form-card { padding: 32px; }
+
+.form-card-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--glass-border);
+}
+
+.form-card-icon {
+  width: 48px; height: 48px;
+  border-radius: var(--r-lg);
+  background: rgba(99,102,241,0.15);
+  color: var(--brand-primary);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem;
+  flex-shrink: 0;
+}
+.form-card-icon--purple {
+  background: rgba(168,85,247,0.15);
+  color: var(--brand-accent);
+}
+
+.form-card-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+.form-card-subtitle {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ─── Form Groups & Inputs ───────────────────────────────────────────────── */
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+@media (max-width: 600px) { .form-row-2 { grid-template-columns: 1fr; } }
+
+.form-group { margin-bottom: 18px; display: flex; flex-direction: column; gap: 6px; }
+
+.form-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-label);
+  letter-spacing: 0.01em;
+}
+.required-star { color: var(--brand-danger); margin-left: 2px; }
+.optional-label { font-size: 0.72rem; color: var(--text-muted); font-weight: 400; }
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.input-icon {
+  position: absolute;
+  left: 14px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  pointer-events: none;
+  transition: color var(--duration) var(--ease);
+}
+
+.form-control-custom {
+  width: 100%;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-md);
+  padding: 11px 14px 11px 40px;
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  font-family: 'Inter', sans-serif;
+  outline: none;
+  transition: all var(--duration) var(--ease);
+  -webkit-appearance: none;
+}
+.form-control-custom::placeholder { color: var(--text-muted); }
+.form-control-custom:focus {
+  border-color: var(--brand-primary);
+  background: rgba(99,102,241,0.07);
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+}
+.form-control-custom:focus + .input-icon,
+.input-wrapper:focus-within .input-icon { color: var(--brand-primary); }
+
+.form-control-custom.is-invalid {
+  border-color: var(--brand-danger);
+  box-shadow: 0 0 0 3px rgba(239,68,68,0.15);
+}
+.form-control-custom.is-valid {
+  border-color: var(--brand-success);
+}
+
+.form-select-custom {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748b' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 38px;
+}
+.form-select-custom option { background: var(--bg-layer2); color: var(--text-primary); }
+
+.field-error {
+  font-size: 0.73rem;
+  color: var(--brand-danger);
+  min-height: 16px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+.field-error:not(:empty)::before { content: '⚠'; }
+
+/* ─── Form Actions ───────────────────────────────────────────────────────── */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+  padding-top: 20px;
+  border-top: 1px solid var(--glass-border);
+}
+
+/* ─── Webcam Card ────────────────────────────────────────────────────────── */
+.webcam-card { padding: 28px 24px; }
+
+/* Preview Container */
+.webcam-preview-container {
+  width: 100%;
+  aspect-ratio: 4/3;
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: #080816;
+  border: 1px solid var(--glass-border);
+  position: relative;
+  margin-bottom: 18px;
+}
+
+.webcam-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  color: var(--text-muted);
+}
+.placeholder-icon { font-size: 2.8rem; opacity: 0.4; }
+.placeholder-text { font-size: 0.9rem; font-weight: 500; }
+.placeholder-hint { font-size: 0.73rem; text-align: center; max-width: 220px; opacity: 0.7; }
+
+.webcam-feed {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Overlay */
+.webcam-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.55), transparent);
+  pointer-events: none;
+}
+.overlay-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #fff;
+  padding: 3px 10px;
+  background: rgba(239,68,68,0.8);
+  border-radius: var(--r-pill);
+}
+.blink-dot { animation: blink 1.2s infinite; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+.face-count-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #fff;
+  padding: 4px 12px;
+  background: rgba(0,0,0,0.55);
+  border-radius: var(--r-pill);
+  border: 1px solid rgba(255,255,255,0.15);
+}
+
+/* ─── Capture Progress ───────────────────────────────────────────────────── */
+.capture-progress-section {
+  margin-bottom: 14px;
+}
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.progress-label { font-size: 0.8rem; color: var(--text-secondary); font-weight: 500; }
+.progress-count { font-size: 0.8rem; font-weight: 700; color: var(--brand-primary); }
+
+.progress-track {
+  height: 6px;
+  background: rgba(255,255,255,0.06);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--grad-primary);
+  border-radius: var(--r-pill);
+  transition: width 0.4s var(--ease);
+  box-shadow: 0 0 10px rgba(99,102,241,0.5);
+}
+
+.progress-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+.progress-dot {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+  border: 2px solid rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.35s var(--ease);
+  position: relative;
+}
+.progress-dot.captured {
+  background: rgba(34,197,94,0.2);
+  border-color: var(--brand-success);
+  box-shadow: 0 0 10px rgba(34,197,94,0.35);
+}
+.progress-dot.captured::after {
+  content: '✓';
+  font-size: 0.7rem;
+  color: var(--brand-success);
+  font-weight: 700;
+}
+.progress-dot.active {
+  border-color: var(--brand-primary);
+  background: rgba(99,102,241,0.15);
+  animation: ring-pulse 1.2s infinite;
+}
+@keyframes ring-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(99,102,241,0.5); }
+  50%       { box-shadow: 0 0 0 6px rgba(99,102,241,0); }
+}
+
+/* ─── Capture Status ─────────────────────────────────────────────────────── */
+.capture-status-area {
+  min-height: 36px;
+  margin-bottom: 10px;
+}
+.status-msg {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  border-radius: var(--r-md);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+.status-msg--info    { background: rgba(6,182,212,0.1);  color: var(--brand-info);    border: 1px solid rgba(6,182,212,0.25); }
+.status-msg--success { background: rgba(34,197,94,0.1);  color: var(--brand-success); border: 1px solid rgba(34,197,94,0.25); }
+.status-msg--error   { background: rgba(239,68,68,0.1);  color: var(--brand-danger);  border: 1px solid rgba(239,68,68,0.25); }
+.status-msg--warning { background: rgba(245,158,11,0.1); color: var(--brand-warning); border: 1px solid rgba(245,158,11,0.25); }
+
+/* ─── Webcam Buttons ─────────────────────────────────────────────────────── */
+.webcam-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.btn-webcam {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  border-radius: var(--r-md);
+  font-size: 0.82rem;
+  font-weight: 600;
+  transition: all var(--duration) var(--ease);
+  border: 1px solid transparent;
+  min-width: 100px;
+}
+.btn-open-cam {
+  background: rgba(99,102,241,0.15);
+  border-color: rgba(99,102,241,0.3);
+  color: var(--brand-primary);
+}
+.btn-open-cam:hover {
+  background: var(--grad-primary);
+  color: #fff;
+  box-shadow: var(--shadow-glow);
+}
+.btn-capture {
+  background: rgba(34,197,94,0.15);
+  border-color: rgba(34,197,94,0.3);
+  color: var(--brand-success);
+}
+.btn-capture:hover {
+  background: var(--grad-success);
+  color: #fff;
+}
+.btn-retake {
+  background: rgba(245,158,11,0.15);
+  border-color: rgba(245,158,11,0.3);
+  color: var(--brand-warning);
+}
+.btn-retake:hover {
+  background: var(--grad-warning);
+  color: #fff;
+}
+.btn-close-cam {
+  background: rgba(239,68,68,0.1);
+  border-color: rgba(239,68,68,0.25);
+  color: var(--brand-danger);
+}
+.btn-close-cam:hover {
+  background: var(--brand-danger);
+  color: #fff;
+}
+.btn-webcam:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; }
+
+/* ─── Result Card ────────────────────────────────────────────────────────── */
+.result-card {
+  text-align: center;
+  padding: 32px 24px;
+  margin-top: 16px;
+  animation: fadeInUp var(--duration-slow) var(--ease);
+}
+.result-icon { font-size: 3rem; margin-bottom: 12px; }
+.success-icon { color: var(--brand-success); }
+.result-title {
+  font-family: 'Outfit', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 8px;
+}
+.result-message { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 20px; }
+.result-actions { display: flex; justify-content: center; gap: 12px; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

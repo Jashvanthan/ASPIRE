@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+{% block title %}Security Dashboard - SmartAttend{% endblock %}
+{% block breadcrumb %}Security{% endblock %}
+
+{% block head_extra %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/security.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 class="page-title"><i class="bi bi-shield-lock-fill me-2"></i>Security Dashboard</h1>
+    <p class="page-subtitle">AI Anti-Spoofing & Liveness Detection monitoring.</p>
+  </div>
+</div>
+
+<div class="security-container">
+  <!-- Stats Row -->
+  <div class="row g-3 mb-4">
+    <div class="col-lg-3 col-md-6">
+      <div class="glass-card stat-card">
+        <div class="stat-icon bg-info-subtle"><i class="bi bi-eye-fill text-info"></i></div>
+        <div class="stat-body">
+          <span class="stat-label">Total Checks</span>
+          <span class="stat-value" id="statTotalChecks">0</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="glass-card stat-card">
+        <div class="stat-icon bg-success-subtle"><i class="bi bi-check-circle-fill text-success"></i></div>
+        <div class="stat-body">
+          <span class="stat-label">Genuine</span>
+          <span class="stat-value text-success" id="statAccepted">0</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="glass-card stat-card">
+        <div class="stat-icon bg-danger-subtle"><i class="bi bi-x-octagon-fill text-danger"></i></div>
+        <div class="stat-body">
+          <span class="stat-label">Rejected</span>
+          <span class="stat-value text-danger" id="statRejected">0</span>
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-6">
+      <div class="glass-card stat-card">
+        <div class="stat-icon bg-warning-subtle"><i class="bi bi-exclamation-triangle-fill text-warning"></i></div>
+        <div class="stat-body">
+          <span class="stat-label">Spoof Rate</span>
+          <span class="stat-value text-warning" id="statSpoofRate">0%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Left: Alerts & Spoof Type Breakdown -->
+    <div class="col-lg-4">
+      <!-- Spoof Type Breakdown -->
+      <div class="glass-card mb-4">
+        <h3 class="section-title"><i class="bi bi-pie-chart-fill me-2 text-info"></i>Spoof Types Today</h3>
+        <div id="spoofTypeBreakdown" class="spoof-breakdown">
+          <div class="text-muted small text-center py-3">No data yet.</div>
+        </div>
+      </div>
+
+      <!-- Settings -->
+      <div class="glass-card">
+        <h3 class="section-title"><i class="bi bi-gear-fill me-2 text-info"></i>Threshold Settings</h3>
+        <div class="settings-form">
+          <div class="setting-row">
+            <label for="settingLiveness">Liveness Threshold</label>
+            <div class="setting-input-group">
+              <input type="range" id="settingLiveness" min="0" max="100" value="60" class="form-range" />
+              <span class="setting-value" id="settingLivenessVal">0.60</span>
+            </div>
+          </div>
+          <div class="setting-row">
+            <label for="settingSpoof">Max Spoof Probability</label>
+            <div class="setting-input-group">
+              <input type="range" id="settingSpoof" min="0" max="100" value="40" class="form-range" />
+              <span class="setting-value" id="settingSpoofVal">0.40</span>
+            </div>
+          </div>
+          <div class="setting-row">
+            <label for="settingRecognition">Recognition Threshold</label>
+            <div class="setting-input-group">
+              <input type="range" id="settingRecognition" min="0" max="100" value="50" class="form-range" />
+              <span class="setting-value" id="settingRecognitionVal">0.50</span>
+            </div>
+          </div>
+          <button class="btn-primary-gradient w-100 mt-3" id="saveSettingsBtn">
+            <i class="bi bi-save me-2"></i>Save Settings
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Recent Alerts & Log Table -->
+    <div class="col-lg-8">
+      <!-- Recent Security Alerts -->
+      <div class="glass-card mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h3 class="section-title mb-0"><i class="bi bi-bell-fill me-2 text-danger"></i>Recent Security Alerts</h3>
+          <span class="badge-custom" id="alertCount">0 alerts</span>
+        </div>
+        <div id="alertsFeed" class="alerts-feed" style="max-height: 300px; overflow-y: auto;">
+          <div class="text-center text-muted small py-4">No spoof attempts detected.</div>
+        </div>
+      </div>
+
+      <!-- Security Logs Table -->
+      <div class="glass-card">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h3 class="section-title mb-0"><i class="bi bi-journal-text me-2 text-info"></i>Security Logs</h3>
+          <div class="d-flex gap-2">
+            <select class="form-select form-select-sm security-filter" id="filterType" style="width: auto;">
+              <option value="">All Types</option>
+              <option value="genuine">Genuine</option>
+              <option value="printed_photo">Printed Photo</option>
+              <option value="screen_replay">Screen Replay</option>
+              <option value="static_image">Static Image</option>
+              <option value="occlusion">Occlusion</option>
+              <option value="unknown_face">Unknown Face</option>
+            </select>
+            <select class="form-select form-select-sm security-filter" id="filterDecision" style="width: auto;">
+              <option value="">All Decisions</option>
+              <option value="accepted">Accepted</option>
+              <option value="rejected">Rejected</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-sm security-table align-middle">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Snapshot</th>
+                <th>Student</th>
+                <th>Type</th>
+                <th>Liveness</th>
+                <th>Spoof %</th>
+                <th>Decision</th>
+              </tr>
+            </thead>
+            <tbody id="logsTableBody">
+              <tr>
+                <td colspan="7" class="text-center text-muted py-3">No logs yet.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <div class="d-flex justify-content-between align-items-center mt-3">
+          <span class="text-muted small" id="logsPaginationInfo">Page 1 of 1</span>
+          <div class="d-flex gap-2">
+            <button class="btn btn-sm btn-outline-secondary" id="logsPrevBtn" disabled>
+              <i class="bi bi-chevron-left"></i> Prev
+            </button>
+            <button class="btn btn-sm btn-outline-secondary" id="logsNextBtn" disabled>
+              Next <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/security.js') }}"></script>
+{% endblock %}

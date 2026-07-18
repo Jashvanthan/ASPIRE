@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+
+{% block title %}SmartAIAttend - Advanced Analytics{% endblock %}
+
+{% block head_extra %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  .risk-critical { background-color: #dc3545; color: white; padding: 2px 8px; border-radius: 4px; font-weight: bold; }
+  .risk-high { background-color: #fd7e14; color: white; padding: 2px 8px; border-radius: 4px; font-weight: bold; }
+  .risk-medium { background-color: #ffc107; color: black; padding: 2px 8px; border-radius: 4px; font-weight: bold; }
+  .risk-low { background-color: #198754; color: white; padding: 2px 8px; border-radius: 4px; font-weight: bold; }
+  .table-dark-glass { background-color: rgba(255, 255, 255, 0.05); color: #fff; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+  <div class="col-12 d-flex justify-content-between align-items-center">
+    <div>
+      <h2><i class="bi bi-bar-chart-line-fill text-primary me-2"></i>Advanced Analytics (Phase 5)</h2>
+      <p class="text-muted mb-0">Drill-down: Batch → Year → Department</p>
+    </div>
+    <div>
+      <a href="/api/advanced-analytics/export" id="exportBtn" class="btn btn-outline-success">
+        <i class="bi bi-file-earmark-excel-fill me-1"></i> Export CSV
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Filters -->
+<div class="card glass-card mb-4">
+  <div class="card-body">
+    <div class="row align-items-end">
+      <div class="col-md-3">
+        <label class="form-label text-muted">1. Batch</label>
+        <select id="filterBatch" class="form-select bg-dark text-light border-secondary">
+          <option value="">All Batches</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label text-muted">2. Academic Year</label>
+        <select id="filterYear" class="form-select bg-dark text-light border-secondary" disabled>
+          <option value="">All Years</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <label class="form-label text-muted">3. Department</label>
+        <select id="filterDept" class="form-select bg-dark text-light border-secondary" disabled>
+          <option value="">All Departments</option>
+        </select>
+      </div>
+      <div class="col-md-3">
+        <button id="resetBtn" class="btn btn-outline-danger w-100">Reset Filters</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="loadingIndicator" class="text-center my-5 d-none">
+  <div class="spinner-border text-primary" role="status">
+    <span class="visually-hidden">Loading...</span>
+  </div>
+  <p class="text-muted mt-2">Crunching the numbers...</p>
+</div>
+
+<div id="dashboardContent">
+  <!-- KPIs -->
+  <div class="row mb-4">
+    <div class="col-md-3"><div class="card glass-card text-center"><div class="card-body"><h5 class="text-muted">Total Students</h5><h2 class="text-primary" id="kpiTotal">-</h2></div></div></div>
+    <div class="col-md-3"><div class="card glass-card text-center"><div class="card-body"><h5 class="text-muted">Overall Attendance</h5><h2 class="text-info" id="kpiAttPct">-</h2></div></div></div>
+    <div class="col-md-3"><div class="card glass-card text-center"><div class="card-body"><h5 class="text-muted">Present Today</h5><h2 class="text-success" id="kpiPresent">-</h2></div></div></div>
+    <div class="col-md-3"><div class="card glass-card text-center"><div class="card-body"><h5 class="text-muted">Absent Today</h5><h2 class="text-danger" id="kpiAbsent">-</h2></div></div></div>
+  </div>
+
+  <!-- AI Insights & Predictions -->
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <div class="card glass-card h-100 border-info">
+        <div class="card-header bg-transparent border-0"><h5 class="mb-0 text-info"><i class="bi bi-lightbulb me-2"></i>AI Insights</h5></div>
+        <div class="card-body">
+          <ul id="insightsList" class="text-light"></ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card glass-card h-100 border-warning">
+        <div class="card-header bg-transparent border-0"><h5 class="mb-0 text-warning"><i class="bi bi-graph-up-arrow me-2"></i>AI Predictions</h5></div>
+        <div class="card-body">
+          <ul id="predictionsList" class="text-light"></ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="row mb-4">
+    <div class="col-md-8">
+      <div class="card glass-card h-100">
+        <div class="card-header bg-transparent border-0"><h5 class="mb-0">Daily Trend (Last 14 Days)</h5></div>
+        <div class="card-body"><canvas id="dailyTrendChart" style="max-height: 250px;"></canvas></div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card glass-card h-100">
+        <div class="card-header bg-transparent border-0"><h5 class="mb-0">Monthly Present</h5></div>
+        <div class="card-body"><canvas id="monthlyTrendChart" style="max-height: 250px;"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Class Data & Risk -->
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <div class="card glass-card h-100">
+        <div class="card-header bg-transparent border-0"><h5 class="mb-0">Class-wise Breakdown</h5></div>
+        <div class="card-body overflow-auto" style="max-height: 350px;">
+          <table class="table table-dark table-hover table-sm">
+            <thead><tr><th>Class</th><th>Students</th><th>Present Today</th><th>Attendance %</th></tr></thead>
+            <tbody id="classTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card glass-card h-100">
+        <div class="card-header bg-transparent border-0"><h5 class="mb-0 text-danger">Student Risk Categorization</h5></div>
+        <div class="card-body overflow-auto" style="max-height: 350px;">
+          <table class="table table-dark table-hover table-sm">
+            <thead><tr><th>Student</th><th>ID</th><th>Attendance %</th><th>Risk</th></tr></thead>
+            <tbody id="riskTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/advanced_analytics.js') }}"></script>
+{% endblock %}
