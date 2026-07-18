@@ -76,6 +76,12 @@ def register():
     )
 
 
+@student_bp.route("/my-qr")
+def my_qr_page():
+    """Render the student QR code generation page."""
+    return render_template("my_qr.html")
+
+
 # ─────────────────────────────────────────────────────────────────────────────
 # Student API Routes
 # ─────────────────────────────────────────────────────────────────────────────
@@ -110,6 +116,22 @@ def create_student():
         status = 409 if "already registered" in error else 500
         return jsonify({"error": error}), status
 
+    # Generate and email QR Code
+    try:
+        from backend.services.qr_service import QRService
+        from backend.services.email_service import EmailService
+        qr_bytes = QRService.generate_qr_bytes(student.student_id)
+        if student.email:
+            app_instance = current_app._get_current_object()
+            EmailService.send_qr_email_async(
+                app=app_instance,
+                email_address=student.email,
+                student_name=student.full_name,
+                qr_bytes=qr_bytes
+            )
+    except Exception as e:
+        logger.error(f"Failed to process QR email for {student.student_id}: {e}")
+
     return jsonify({
         "student": student.to_dict(),
         "message": f"Student '{student.full_name}' registered successfully!",
@@ -130,6 +152,26 @@ def get_student(student_id: str):
         return jsonify({"error": f"Student '{student_id}' not found."}), 404
 
     return jsonify({"student": student.to_dict()}), 200
+
+
+@student_bp.route("/api/students/<string:student_id>/qr", methods=["GET"])
+def generate_student_qr(student_id: str):
+    """
+    Generate a QR code containing the student_id for Two-Factor Attendance.
+    """
+    import io
+    from flask import send_file
+    from backend.services.qr_service import QRService
+    
+    # Verify student exists before generating QR
+    student = StudentService.get_student_by_id(student_id)
+    if not student:
+        return jsonify({"error": f"Student '{student_id}' not found."}), 404
+        
+    qr_bytes = QRService.generate_qr_bytes(student_id)
+    
+    img_io = io.BytesIO(qr_bytes)
+    return send_file(img_io, mimetype='image/png')
 
 
 @student_bp.route("/api/students/<string:student_id>", methods=["DELETE"])

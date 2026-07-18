@@ -65,6 +65,17 @@ class Config:
     UNKNOWN_PERSON_COOLDOWN_SECONDS: int = 60  # Cooldown before saving another snapshot of the same unknown person
     UNKNOWN_FACES_FOLDER: Path = BASE_DIR / "uploads" / "unknown_faces"
 
+    # ── Pipeline & Performance ────────────────────────────────────────────
+    DETECTION_COOLDOWN_SECONDS: int = 30       # Security logs cooldown
+    PROCESS_EVERY_N_FRAMES: int = 15           # Limit heavy ML models for ~2 FPS
+
+
+    # ── Email / SMTP ──────────────────────────────────────────────────────────
+    SMTP_SERVER: str = os.environ.get("SMTP_SERVER", "smtp.gmail.com")
+    SMTP_PORT: int = int(os.environ.get("SMTP_PORT", 587))
+    SMTP_USERNAME: str = os.environ.get("SMTP_USERNAME", "")
+    SMTP_PASSWORD: str = os.environ.get("SMTP_PASSWORD", "")
+    MAIL_DEFAULT_SENDER: str = os.environ.get("MAIL_DEFAULT_SENDER", "SmartAttend <noreply@smartattend.com>")
 
     # ── CORS ──────────────────────────────────────────────────────────────────
     CORS_ORIGINS: list = ["*"]

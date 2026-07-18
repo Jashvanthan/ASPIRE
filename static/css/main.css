@@ -404,7 +404,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   box-shadow: var(--shadow-card);
   position: relative;
   overflow: hidden;
-  transition: border-color var(--duration) var(--ease);
+  transition: border-color var(--duration) var(--ease), transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
+}
+.glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.6), 0 0 20px rgba(99,102,241,0.15);
+  border-color: rgba(99,102,241,0.3);
 }
 .glass-card::before {
   content: '';
@@ -416,7 +421,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   transition: opacity var(--duration) var(--ease);
   pointer-events: none;
 }
-.glass-card:hover::before { opacity: 0.06; }
+.glass-card:hover::before { opacity: 0.1; }
 
 /* ─── Buttons ────────────────────────────────────────────────────────────── */
 .btn-primary-gradient {

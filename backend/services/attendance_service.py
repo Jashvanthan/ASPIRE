@@ -6,6 +6,7 @@ from typing import Tuple, Dict, Any, List
 from backend.models.attendance import Attendance
 from backend.database.db import db
 from sqlalchemy import func
+from backend.services.cooldown_service import get_cooldown_service
 
 logger = logging.getLogger(__name__)
 
@@ -27,9 +28,6 @@ class AttendanceService:
             return
         self._initialized = True
         
-        # Cooldown cache to prevent spamming the DB for the same person in the same session
-        # Format: {student_id: timestamp_of_last_check}
-        self._cooldowns: Dict[str, float] = {}
         # Cooldown duration in seconds
         self.COOLDOWN_SECONDS = 5.0
         
@@ -54,15 +52,10 @@ class AttendanceService:
         current_time = now.strftime("%H:%M:%S")
         
         # 1. Check Cooldown Cache (Memory) to avoid DB spam
-        current_ts = time.time()
-        last_check = self._cooldowns.get(student_id, 0)
-        
-        if current_ts - last_check < self.COOLDOWN_SECONDS:
+        cooldown_svc = get_cooldown_service()
+        if cooldown_svc.is_on_cooldown(f"att_{student_id}", self.COOLDOWN_SECONDS):
             # We recently processed this person, assume Already Marked for UI stability
             return False, "Already Marked", "yellow"
-            
-        # Update cooldown timestamp
-        self._cooldowns[student_id] = current_ts
 
         try:
             # 2. Check Database for duplicate today

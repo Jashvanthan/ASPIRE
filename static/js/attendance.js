@@ -420,13 +420,14 @@ function drawDetections(detections, ctx) {
         ctx.fillText(label, lx + 6, ly + 15);
 
         // ── Liveness sub-label ──
+        let slY = ly === y - lh - 4 ? y + h + 4 : ly - lh - 4;
+        
         if (det.liveness_score !== undefined && det.spoof_probability !== undefined) {
             const livePct  = (det.liveness_score * 100).toFixed(0);
             const subLabel = `Live: ${livePct}%`;
 
             ctx.font = '11px Inter, sans-serif';
             const stw = ctx.measureText(subLabel).width;
-            const slY = ly === y - lh - 4 ? y + h + 4 : ly - lh - 4;
 
             ctx.fillStyle = 'rgba(0,0,0,0.65)';
             ctx.beginPath();
@@ -436,6 +437,25 @@ function drawDetections(detections, ctx) {
             const liveOk = det.liveness_score >= 0.6;
             ctx.fillStyle = liveOk ? '#4ade80' : '#f87171';
             ctx.fillText(subLabel, lx + 6, slY + 13);
+            
+            // Advance Y position for 2FA label if we drew this on top/bottom
+            if (ly === y - lh - 4) slY += 22; // drawing below
+            else slY -= 22; // drawing above
+        }
+        
+        // ── 2FA sub-label ──
+        if (det.two_factor_verified) {
+            const twoFaLabel = `✅ 2FA Passed`;
+            ctx.font = 'bold 11px Inter, sans-serif';
+            const tfw = ctx.measureText(twoFaLabel).width;
+            
+            ctx.fillStyle = 'rgba(0,0,0,0.75)';
+            ctx.beginPath();
+            ctx.roundRect(lx, slY, tfw + 12, 18, 3);
+            ctx.fill();
+            
+            ctx.fillStyle = '#10b981';
+            ctx.fillText(twoFaLabel, lx + 6, slY + 13);
         }
     });
 }

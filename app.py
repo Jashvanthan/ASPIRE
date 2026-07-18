@@ -147,6 +147,21 @@ def create_app(env: str = None) -> Flask:
 
     app.logger.info("Blueprints registered.")
 
+    # ── Role Selector Routes ──────────────────────────────────────────────────
+    app.config["SECRET_KEY"] = os.environ.get("SECRET_KEY", "smartattend_secret_key_123")
+
+    from flask import session, redirect, request
+
+    @app.route("/set_role/<role>")
+    def set_role(role):
+        if role in ["admin", "staff", "student"]:
+            session["role"] = role
+        return redirect(request.referrer or "/")
+
+    @app.context_processor
+    def inject_role():
+        return {"current_role": session.get("role", "admin")}
+
     app.logger.info(
         "SmartAttend started in '%s' mode on http://127.0.0.1:5000",
         env or os.environ.get("FLASK_ENV", "development"),

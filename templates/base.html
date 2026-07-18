@@ -51,6 +51,7 @@
           <span class="nav-label">Dashboard</span>
         </a>
       </li>
+      {% if current_role != 'student' %}
       <li class="nav-item {% if request.endpoint == 'student.register' %}active{% endif %}">
         <a href="{{ url_for('student.register') }}" class="nav-link">
           <i class="bi bi-person-plus-fill nav-icon"></i>
@@ -81,8 +82,19 @@
           <span class="nav-label">Live Attendance</span>
         </a>
       </li>
+      {% endif %}
+      
+      {% if current_role == 'student' %}
+      <li class="nav-item {% if request.endpoint == 'student.my_qr_page' %}active{% endif %}">
+        <a href="{{ url_for('student.my_qr_page') }}" class="nav-link text-info">
+          <i class="bi bi-qr-code nav-icon"></i>
+          <span class="nav-label">My QR Code</span>
+        </a>
+      </li>
+      {% endif %}
     </ul>
 
+    {% if current_role == 'admin' %}
     <div class="nav-section-label mt-3">Management</div>
     <ul class="nav-list">
       <li class="nav-item {% if request.endpoint == 'security.security_dashboard' %}active{% endif %}">
@@ -106,6 +118,7 @@
         </a>
       </li>
     </ul>
+    {% endif %}
   </nav>
 
   <!-- Sidebar Footer -->
@@ -151,10 +164,18 @@
         <span class="notif-dot"></span>
       </button>
 
-      <!-- User Avatar -->
-      <div class="topbar-avatar" title="Administrator">
-        <i class="bi bi-person-circle"></i>
-        <span class="avatar-label">Admin</span>
+      <!-- User Avatar (Dropdown) -->
+      <div class="dropdown">
+        <div class="topbar-avatar" data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;" title="Current Role: {{ current_role|title }}">
+          <i class="bi bi-person-circle"></i>
+          <span class="avatar-label">{{ current_role|title }}</span>
+        </div>
+        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" style="background: rgba(15,15,30,0.95); border: 1px solid rgba(255,255,255,0.1); margin-top: 10px;">
+          <li><h6 class="dropdown-header" style="color: var(--text-muted);">Switch Role</h6></li>
+          <li><a class="dropdown-item {% if current_role == 'admin' %}active{% endif %}" href="/set_role/admin"><i class="bi bi-shield-lock me-2"></i>Admin</a></li>
+          <li><a class="dropdown-item {% if current_role == 'staff' %}active{% endif %}" href="/set_role/staff"><i class="bi bi-person-badge me-2"></i>Staff</a></li>
+          <li><a class="dropdown-item {% if current_role == 'student' %}active{% endif %}" href="/set_role/student"><i class="bi bi-backpack me-2"></i>Student</a></li>
+        </ul>
       </div>
     </div>
   </header>

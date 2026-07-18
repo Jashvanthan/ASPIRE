@@ -17,6 +17,8 @@ logger = logging.getLogger(__name__)
 
 attendance_bp = Blueprint("attendance", __name__)
 
+_frame_counter = 0
+
 @attendance_bp.route("/attendance", methods=["GET"])
 def attendance_page():
     """Render the Live Attendance UI."""
@@ -26,6 +28,8 @@ def attendance_page():
 
 @attendance_bp.route("/api/attendance/process-frame", methods=["POST"])
 def process_frame():
+    global _frame_counter
+    _frame_counter += 1
     """
     Receive a base64-encoded frame from the browser.
     Run InsightFace detection → recognition → anti-spoof → attendance.
@@ -70,6 +74,8 @@ def process_frame():
     from flask import current_app
     is_spoof_enabled = current_app.config.get("ANTISPOOF_ENABLED", True)
     liveness_thresh = current_app.config.get("LIVENESS_THRESHOLD", 0.60)
+    process_every_n = current_app.config.get("PROCESS_EVERY_N_FRAMES", 15)
+    cooldown_seconds = current_app.config.get("DETECTION_COOLDOWN_SECONDS", 30)
     
     # Clean up old tracks so we don't hold memory forever
     track_svc.cleanup_stale_tracks(max_age_seconds=5)
@@ -80,6 +86,11 @@ def process_frame():
         logger.warning(f"Detection error: {err}")
         
     detections = []
+    
+    # ── 1.5 Scan for QR Code ──────────────────────────────────────────────
+    qr_detector = cv2.QRCodeDetector()
+    qr_data, _, _ = qr_detector.detectAndDecode(frame)
+    qr_data = qr_data.strip() if qr_data else None
     
     # ── 2. Process Each Tracked Person ──────────────────────────────────
     for person in tracked_people:
@@ -126,6 +137,9 @@ def process_frame():
                 det["similarity"] = round(cached_data["sim"], 2)
                 det["student_id"] = student["student_id"]
                 
+                # Check 2FA
+                det["two_factor_verified"] = bool(qr_data and qr_data.lower() == student["student_id"].lower())
+                
                 if not cached_data["marked_attendance"]:
                     if duration >= verification_seconds:
                         success, msg, color, att_id = att_svc.mark_attendance(student, cached_data["sim"])
@@ -166,6 +180,12 @@ def process_frame():
             continue
             
         # ── CACHE MISS: Run InsightFace -> AntiSpoof -> ArcFace ──────────
+        if _frame_counter % process_every_n != 0:
+            det["status_color"] = "gray"
+            det["label"] = "Analyzing..."
+            detections.append(det)
+            continue
+            
         # Crop person from frame to speed up InsightFace
         # Add padding to crop for better face detection
         pad = 20
@@ -222,98 +242,111 @@ def process_frame():
             if student:
                 det["similarity"] = round(sim, 2)
                 det["student_id"] = student["student_id"]
+                
+                # Check 2FA
+                det["two_factor_verified"] = bool(qr_data and qr_data.lower() == student["student_id"].lower())
+                
                 det["status_color"] = "yellow"
                 det["label"] = f"Verifying {student['full_name']}... (10s)"
                 
                 # Log Genuine Attempt to Security Dashboard
-                try:
-                    from backend.services.security_log_service import get_security_log_service
-                    sec_log_svc = get_security_log_service()
-                    sec_log_svc.log_attempt(
-                        student_id=student["student_id"],
-                        student_name=student["full_name"],
-                        spoof_type="genuine",
-                        liveness_score=live_conf if is_spoof_enabled else 1.0,
-                        recognition_confidence=sim,
-                        spoof_probability=spoof_conf if is_spoof_enabled else 0.0,
-                        decision="accepted",
-                        snapshot_path=None,
-                    )
-                except Exception as e:
-                    logger.error(f"Failed to log genuine attempt: {e}")
+                from backend.services.cooldown_service import get_cooldown_service
+                cooldown_svc = get_cooldown_service()
+                if not cooldown_svc.is_on_cooldown(f"sec_genuine_{student['student_id']}", cooldown_seconds):
+                    try:
+                        from backend.services.security_log_service import get_security_log_service
+                        sec_log_svc = get_security_log_service()
+                        sec_log_svc.log_attempt(
+                            student_id=student["student_id"],
+                            student_name=student["full_name"],
+                            spoof_type="genuine",
+                            liveness_score=live_conf if is_spoof_enabled else 1.0,
+                            recognition_confidence=sim,
+                            spoof_probability=spoof_conf if is_spoof_enabled else 0.0,
+                            decision="accepted",
+                            snapshot_path=None,
+                        )
+                    except Exception as e:
+                        logger.error(f"Failed to log genuine attempt: {e}")
             else:
                 det["status_color"] = "red"
                 det["label"] = f"Unknown Person"
                 
                 # Phase 4: Save Unknown Person Snapshot
-                try:
-                    import uuid
-                    import time
-                    from backend.services.audit_service import get_audit_service
-                    from backend.services.security_log_service import get_security_log_service
-                    
-                    folder = current_app.config.get("UNKNOWN_FACES_FOLDER")
-                    os.makedirs(folder, exist_ok=True)
-                    filename = f"unknown_{uuid.uuid4().hex[:8]}.jpg"
-                    filepath = os.path.join(folder, filename)
-                    cv2.imwrite(filepath, crop_img)
-                    
-                    audit_svc = get_audit_service()
-                    audit_svc.log_unknown_person(filepath, float(face.det_score))
-                    
-                    # Store relative path for frontend rendering
-                    relative_path = f"unknown_faces/{filename}"
-                    
-                    sec_log_svc = get_security_log_service()
-                    sec_log_svc.log_attempt(
-                        student_id=None,
-                        student_name="Unknown Person",
-                        spoof_type="unknown_face",
-                        liveness_score=live_conf if is_spoof_enabled else 1.0,
-                        recognition_confidence=float(face.det_score),
-                        spoof_probability=spoof_conf if is_spoof_enabled else 0.0,
-                        decision="rejected",
-                        snapshot_path=relative_path,
-                    )
-                    
-                    snapshot_saved = True
-                except Exception as e:
-                    logger.error(f"Failed to save unknown person snapshot: {e}")
-                    snapshot_saved = False
+                from backend.services.cooldown_service import get_cooldown_service
+                cooldown_svc = get_cooldown_service()
+                if not cooldown_svc.is_on_cooldown(f"sec_unknown_{track_id}", cooldown_seconds):
+                    try:
+                        import uuid
+                        import time
+                        from backend.services.audit_service import get_audit_service
+                        from backend.services.security_log_service import get_security_log_service
+                        
+                        folder = current_app.config.get("UNKNOWN_FACES_FOLDER")
+                        os.makedirs(folder, exist_ok=True)
+                        filename = f"unknown_{uuid.uuid4().hex[:8]}.jpg"
+                        filepath = os.path.join(folder, filename)
+                        cv2.imwrite(filepath, crop_img)
+                        
+                        audit_svc = get_audit_service()
+                        audit_svc.log_unknown_person(filepath, float(face.det_score))
+                        
+                        # Store relative path for frontend rendering
+                        relative_path = f"unknown_faces/{filename}"
+                        
+                        sec_log_svc = get_security_log_service()
+                        sec_log_svc.log_attempt(
+                            student_id=None,
+                            student_name="Unknown Person",
+                            spoof_type="unknown_face",
+                            liveness_score=live_conf if is_spoof_enabled else 1.0,
+                            recognition_confidence=float(face.det_score),
+                            spoof_probability=spoof_conf if is_spoof_enabled else 0.0,
+                            decision="rejected",
+                            snapshot_path=relative_path,
+                        )
+                        
+                        snapshot_saved = True
+                    except Exception as e:
+                        logger.error(f"Failed to save unknown person snapshot: {e}")
+                        snapshot_saved = False
         else:
             det["status_color"] = "red"
             det["label"] = f"⚠ Spoof Detected"
             
             # Log Spoof Attempt to Security Dashboard
-            try:
-                import time
-                from backend.services.security_log_service import get_security_log_service
-                
-                folder = current_app.config.get("SECURITY_SNAPSHOTS_FOLDER", "uploads/security_snapshots")
-                os.makedirs(folder, exist_ok=True)
-                filename = f"spoof_{int(time.time() * 1000)}.jpg"
-                filepath = os.path.join(folder, filename)
-                cv2.imwrite(filepath, crop_img)
-                relative_path = f"security_snapshots/{filename}"
-                
-                # Try to recognize face if possible for the log
-                student_match, _ = rec_svc.recognize_face(embedding)
-                
-                sec_log_svc = get_security_log_service()
-                sec_log_svc.log_attempt(
-                    student_id=student_match["student_id"] if student_match else None,
-                    student_name=student_match["full_name"] if student_match else "Unknown",
-                    spoof_type=spoof_label,
-                    liveness_score=live_conf,
-                    recognition_confidence=float(face.det_score),
-                    spoof_probability=spoof_conf,
-                    decision="rejected",
-                    snapshot_path=relative_path,
-                )
-                snapshot_saved = True
-            except Exception as e:
-                logger.error(f"Failed to log spoof attempt: {e}")
-                snapshot_saved = False
+            from backend.services.cooldown_service import get_cooldown_service
+            cooldown_svc = get_cooldown_service()
+            if not cooldown_svc.is_on_cooldown(f"sec_spoof_{track_id}", cooldown_seconds):
+                try:
+                    import time
+                    from backend.services.security_log_service import get_security_log_service
+                    
+                    folder = current_app.config.get("SECURITY_SNAPSHOTS_FOLDER", "uploads/security_snapshots")
+                    os.makedirs(folder, exist_ok=True)
+                    filename = f"spoof_{int(time.time() * 1000)}.jpg"
+                    filepath = os.path.join(folder, filename)
+                    cv2.imwrite(filepath, crop_img)
+                    relative_path = f"security_snapshots/{filename}"
+                    
+                    # Try to recognize face if possible for the log
+                    student_match, _ = rec_svc.recognize_face(embedding)
+                    
+                    sec_log_svc = get_security_log_service()
+                    sec_log_svc.log_attempt(
+                        student_id=student_match["student_id"] if student_match else None,
+                        student_name=student_match["full_name"] if student_match else "Unknown",
+                        spoof_type=spoof_label,
+                        liveness_score=live_conf,
+                        recognition_confidence=float(face.det_score),
+                        spoof_probability=spoof_conf,
+                        decision="rejected",
+                        snapshot_path=relative_path,
+                    )
+                    snapshot_saved = True
+                except Exception as e:
+                    logger.error(f"Failed to log spoof attempt: {e}")
+                    snapshot_saved = False
             
         # Save to Cache
         if use_cache:

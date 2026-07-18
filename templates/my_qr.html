@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}My QR Code{% endblock %}
+{% block breadcrumb %}My QR Code{% endblock %}
+
+{% block head_extra %}
+<style>
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px) scale(0.95); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.qr-reveal {
+  animation: fadeUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+.qr-image {
+  background: white;
+  padding: 12px;
+  border-radius: 12px;
+  width: 250px;
+  height: 250px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 16px rgba(168,85,247,0.4);
+  transition: transform 0.3s ease;
+}
+.qr-image:hover {
+  transform: scale(1.05);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 class="page-title">My 2FA QR Code</h1>
+    <p class="page-subtitle">Generate your Two-Factor Authentication QR code for attendance.</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="glass-card" style="padding: 24px;">
+      <h3 style="font-size: 1.1rem; color: var(--text-primary); margin-bottom: 20px;">Generate QR Code</h3>
+      
+      <div class="form-group mb-3">
+        <label class="form-label">Student ID</label>
+        <div class="input-wrapper">
+          <i class="bi bi-person-badge input-icon" style="position: absolute; left: 14px; top: 11px;"></i>
+          <input type="text" id="studentIdInput" class="form-control-custom" placeholder="e.g. CS101">
+        </div>
+      </div>
+      
+      <button class="btn-primary-gradient w-100 mt-2" onclick="generateQR()">
+        <i class="bi bi-qr-code me-2"></i>Generate QR Code
+      </button>
+    </div>
+  </div>
+  
+  <div class="col-md-6">
+    <div class="glass-card d-flex flex-column align-items-center justify-content-center" style="padding: 24px; min-height: 300px;">
+      <div id="qrLoading" class="d-none text-center">
+        <div class="spinner-border spinner-border-sm text-primary mb-2" role="status"></div>
+        <div class="text-muted">Generating...</div>
+      </div>
+      
+      <div id="qrEmpty" class="text-center text-muted">
+        <i class="bi bi-qr-code-scan" style="font-size: 3rem; opacity: 0.5;"></i>
+        <p class="mt-2">Enter your Student ID and click Generate.</p>
+      </div>
+      
+      <div id="qrResult" class="d-none text-center qr-reveal">
+        <img id="qrImage" src="" alt="Student QR Code" class="qr-image">
+        <p class="mt-3 mb-0" style="color: var(--text-primary); font-weight: 500;">Show this to the camera during Live Attendance.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function generateQR() {
+    const studentId = document.getElementById('studentIdInput').value.trim();
+    if (!studentId) {
+        window.SmartAttend?.error('Missing Field', 'Please enter your Student ID.');
+        return;
+    }
+    
+    document.getElementById('qrEmpty').classList.add('d-none');
+    document.getElementById('qrResult').classList.add('d-none');
+    document.getElementById('qrLoading').classList.remove('d-none');
+    
+    // Create image element source via API
+    const imgUrl = `/api/students/${encodeURIComponent(studentId)}/qr`;
+    const img = new Image();
+    
+    img.onload = () => {
+        document.getElementById('qrImage').src = imgUrl;
+        document.getElementById('qrLoading').classList.add('d-none');
+        document.getElementById('qrResult').classList.remove('d-none');
+        window.SmartAttend?.success('Success', 'QR Code generated successfully!');
+    };
+    
+    img.onerror = () => {
+        document.getElementById('qrLoading').classList.add('d-none');
+        document.getElementById('qrEmpty').classList.remove('d-none');
+        window.SmartAttend?.error('Error', 'Failed to generate QR code. Invalid ID?');
+    };
+    
+    img.src = imgUrl;
+}
+</script>
+{% endblock %}
