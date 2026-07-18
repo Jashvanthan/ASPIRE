@@ -32225,3 +32225,347 @@ WHERE attendance.date = ?) AS anon_1]
 2026-07-18 16:06:29 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:06:29] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
 2026-07-18 16:06:29 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:06:29] "GET /api/students?page=1&per_page=10 HTTP/1.1" 200 -
 2026-07-18 16:06:30 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:06:30] "GET /api/stats HTTP/1.1" 200 -
+2026-07-18 16:14:29 [INFO] app – Logging configured → D:\MAKE-A-THON\SmartAIAttend\SmartAttend\logs\smartattend.log
+2026-07-18 16:14:29 [INFO] app – Database tables verified / created.
+2026-07-18 16:14:29 [INFO] app – Phase 4 schema migrations checked/applied.
+2026-07-18 16:14:29 [INFO] app – Phase 5 schema migrations checked/applied.
+2026-07-18 16:14:29 [INFO] app – Phase 6 schema migrations checked/applied.
+2026-07-18 16:14:29 [INFO] app – Blueprints registered.
+2026-07-18 16:14:29 [INFO] app – SmartAttend started in 'development' mode on http://127.0.0.1:5000
+2026-07-18 16:14:29 [INFO] werkzeug – [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.93.91.65:5000
+2026-07-18 16:14:29 [INFO] werkzeug – [33mPress CTRL+C to quit[0m
+2026-07-18 16:14:29 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:14:29] "GET /ai-assistant HTTP/1.1" 200 -
+2026-07-18 16:14:29 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:14:29] "GET /static/css/main.css HTTP/1.1" 200 -
+2026-07-18 16:14:29 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:14:29] "[36mGET /static/css/table.css HTTP/1.1[0m" 304 -
+2026-07-18 16:14:29 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:14:29] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-18 16:14:29 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:14:29] "GET /static/js/ai_assistant.js HTTP/1.1" 200 -
+2026-07-18 16:14:33 [INFO] backend.services.security_log_service – SecurityLogService created.
+2026-07-18 16:14:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:14:33] "GET /api/security/stats HTTP/1.1" 200 -
+2026-07-18 16:14:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:14:33] "GET /api/security/alerts?limit=15 HTTP/1.1" 200 -
+2026-07-18 16:14:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:14:33] "GET /api/security/logs?page=1&per_page=15 HTTP/1.1" 200 -
+2026-07-18 16:14:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:14:33] "[33mGET /api/security/uploads/unknown_faces/unknown_fb34f43f.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:14:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:14:33] "[33mGET /api/security/uploads/unknown_faces/unknown_d2df440a.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:14:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:14:33] "[33mGET /api/security/uploads/unknown_faces/unknown_ca671a41.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:14:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:14:33] "[33mGET /api/security/uploads/unknown_faces/unknown_1f8eae8f.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:14:35 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:14:35] "POST /api/analytics/assistant HTTP/1.1" 200 -
+2026-07-18 16:14:38 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:14:38] "GET / HTTP/1.1" 200 -
+2026-07-18 16:14:38 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:14:38] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-18 16:14:38 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:14:38] "[36mGET /static/css/table.css HTTP/1.1[0m" 304 -
+2026-07-18 16:14:38 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:14:38] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-18 16:14:38 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:14:38] "GET /api/students?page=1&per_page=10 HTTP/1.1" 200 -
+2026-07-18 16:14:38 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:14:38] "GET /api/stats HTTP/1.1" 200 -
+2026-07-18 16:14:43 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:14:43] "GET /register HTTP/1.1" 200 -
+2026-07-18 16:14:43 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:14:43] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-18 16:14:43 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:14:43] "[36mGET /static/css/table.css HTTP/1.1[0m" 304 -
+2026-07-18 16:14:43 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:14:43] "GET /static/css/register.css HTTP/1.1" 200 -
+2026-07-18 16:14:43 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:14:43] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-18 16:14:43 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:14:43] "GET /static/js/register.js HTTP/1.1" 200 -
+2026-07-18 16:15:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:15:33] "GET /api/security/stats HTTP/1.1" 200 -
+2026-07-18 16:15:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:15:33] "GET /api/security/alerts?limit=15 HTTP/1.1" 200 -
+2026-07-18 16:15:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:15:33] "GET /api/security/logs?page=1&per_page=15 HTTP/1.1" 200 -
+2026-07-18 16:15:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:15:33] "[33mGET /api/security/uploads/unknown_faces/unknown_fb34f43f.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:15:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:15:33] "[33mGET /api/security/uploads/unknown_faces/unknown_d2df440a.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:15:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:15:33] "[33mGET /api/security/uploads/unknown_faces/unknown_ca671a41.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:15:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:15:33] "[33mGET /api/security/uploads/unknown_faces/unknown_1f8eae8f.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:16:21 [INFO] backend.services.student_service – Student registered: Jashvanthan A (312324104113)
+2026-07-18 16:16:21 [ERROR] backend.routes.student_routes – Failed to process QR email for 312324104113: No module named 'qrcode'
+2026-07-18 16:16:21 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:16:21] "[35m[1mPOST /api/students HTTP/1.1[0m" 201 -
+2026-07-18 16:16:27 [INFO] backend.routes.student_routes – Capture session started: 7f4261f8-60cd-4d60-bfd3-31b5ac6dc88e for student 312324104113
+2026-07-18 16:16:27 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:16:27] "POST /api/capture/start HTTP/1.1" 200 -
+2026-07-18 16:16:27 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:16:27] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:16:27 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:16:27] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:16:28 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:16:28] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:16:28 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:16:28] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:16:28 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:16:28] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:16:29 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:16:29] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:16:29 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:16:29] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:16:29 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:16:29] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:16:29 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:16:29] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:16:30 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:16:30] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:16:30 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:16:30] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:16:30 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:16:30] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:16:31 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:16:31] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:16:31 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:16:31] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:16:31 [INFO] backend.routes.student_routes – Capture complete: 15 frames for session 7f4261f8-60cd-4d60-bfd3-31b5ac6dc88e
+2026-07-18 16:16:31 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:16:31] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:16:31 [INFO] backend.services.embedding_service – Loading InsightFace model 'buffalo_s' …
+2026-07-18 16:16:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:16:33] "GET /api/security/stats HTTP/1.1" 200 -
+2026-07-18 16:16:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:16:33] "GET /api/security/alerts?limit=15 HTTP/1.1" 200 -
+2026-07-18 16:16:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:16:33] "GET /api/security/logs?page=1&per_page=15 HTTP/1.1" 200 -
+2026-07-18 16:16:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:16:33] "[33mGET /api/security/uploads/unknown_faces/unknown_fb34f43f.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:16:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:16:33] "[33mGET /api/security/uploads/unknown_faces/unknown_d2df440a.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:16:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:16:33] "[33mGET /api/security/uploads/unknown_faces/unknown_ca671a41.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:16:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:16:33] "[33mGET /api/security/uploads/unknown_faces/unknown_1f8eae8f.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:16:35 [INFO] backend.services.embedding_service – InsightFace model loaded successfully.
+2026-07-18 16:16:40 [INFO] backend.services.student_service – Embedding updated for student: 312324104113
+2026-07-18 16:16:40 [INFO] backend.services.recognition_service – RecognitionService created.
+2026-07-18 16:16:40 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:16:40] "POST /api/embedding/generate HTTP/1.1" 200 -
+2026-07-18 16:17:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:17:33] "GET /api/security/alerts?limit=15 HTTP/1.1" 200 -
+2026-07-18 16:17:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:17:33] "GET /api/security/stats HTTP/1.1" 200 -
+2026-07-18 16:17:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:17:33] "GET /api/security/logs?page=1&per_page=15 HTTP/1.1" 200 -
+2026-07-18 16:17:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:17:33] "[33mGET /api/security/uploads/unknown_faces/unknown_fb34f43f.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:17:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:17:33] "[33mGET /api/security/uploads/unknown_faces/unknown_d2df440a.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:17:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:17:33] "[33mGET /api/security/uploads/unknown_faces/unknown_ca671a41.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:17:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:17:33] "[33mGET /api/security/uploads/unknown_faces/unknown_1f8eae8f.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:18:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:18:33] "GET /api/security/stats HTTP/1.1" 200 -
+2026-07-18 16:18:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:18:33] "GET /api/security/alerts?limit=15 HTTP/1.1" 200 -
+2026-07-18 16:18:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:18:33] "GET /api/security/logs?page=1&per_page=15 HTTP/1.1" 200 -
+2026-07-18 16:18:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:18:33] "[33mGET /api/security/uploads/unknown_faces/unknown_fb34f43f.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:18:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:18:33] "[33mGET /api/security/uploads/unknown_faces/unknown_d2df440a.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:18:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:18:33] "[33mGET /api/security/uploads/unknown_faces/unknown_ca671a41.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:18:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:18:33] "[33mGET /api/security/uploads/unknown_faces/unknown_1f8eae8f.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:19:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:19:33] "GET /api/security/stats HTTP/1.1" 200 -
+2026-07-18 16:19:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:19:33] "GET /api/security/alerts?limit=15 HTTP/1.1" 200 -
+2026-07-18 16:19:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:19:33] "GET /api/security/logs?page=1&per_page=15 HTTP/1.1" 200 -
+2026-07-18 16:19:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:19:33] "[33mGET /api/security/uploads/unknown_faces/unknown_fb34f43f.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:19:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:19:33] "[33mGET /api/security/uploads/unknown_faces/unknown_d2df440a.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:19:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:19:33] "[33mGET /api/security/uploads/unknown_faces/unknown_ca671a41.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:19:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:19:33] "[33mGET /api/security/uploads/unknown_faces/unknown_1f8eae8f.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:20:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:20:33] "GET /api/security/stats HTTP/1.1" 200 -
+2026-07-18 16:20:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:20:33] "GET /api/security/alerts?limit=15 HTTP/1.1" 200 -
+2026-07-18 16:20:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:20:33] "GET /api/security/logs?page=1&per_page=15 HTTP/1.1" 200 -
+2026-07-18 16:20:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:20:33] "[33mGET /api/security/uploads/unknown_faces/unknown_fb34f43f.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:20:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:20:33] "[33mGET /api/security/uploads/unknown_faces/unknown_d2df440a.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:20:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:20:33] "[33mGET /api/security/uploads/unknown_faces/unknown_ca671a41.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:20:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:20:33] "[33mGET /api/security/uploads/unknown_faces/unknown_1f8eae8f.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:21:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:21:33] "GET /api/security/stats HTTP/1.1" 200 -
+2026-07-18 16:21:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:21:33] "GET /api/security/alerts?limit=15 HTTP/1.1" 200 -
+2026-07-18 16:21:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:21:33] "GET /api/security/logs?page=1&per_page=15 HTTP/1.1" 200 -
+2026-07-18 16:21:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:21:33] "[33mGET /api/security/uploads/unknown_faces/unknown_d2df440a.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:21:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:21:33] "[33mGET /api/security/uploads/unknown_faces/unknown_fb34f43f.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:21:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:21:33] "[33mGET /api/security/uploads/unknown_faces/unknown_ca671a41.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:21:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:21:33] "[33mGET /api/security/uploads/unknown_faces/unknown_1f8eae8f.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:22:30 [INFO] app – Logging configured → D:\MAKE-A-THON\SmartAIAttend\SmartAttend\logs\smartattend.log
+2026-07-18 16:22:30 [INFO] app – Database tables verified / created.
+2026-07-18 16:22:30 [INFO] app – Phase 4 schema migrations checked/applied.
+2026-07-18 16:22:30 [INFO] app – Phase 5 schema migrations checked/applied.
+2026-07-18 16:22:30 [INFO] app – Phase 6 schema migrations checked/applied.
+2026-07-18 16:22:30 [INFO] app – Blueprints registered.
+2026-07-18 16:22:30 [INFO] app – SmartAttend started in 'development' mode on http://127.0.0.1:5000
+2026-07-18 16:22:30 [INFO] werkzeug – [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://10.93.91.65:5000
+2026-07-18 16:22:30 [INFO] werkzeug – [33mPress CTRL+C to quit[0m
+2026-07-18 16:22:33 [INFO] backend.services.security_log_service – SecurityLogService created.
+2026-07-18 16:22:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:22:33] "GET /api/security/stats HTTP/1.1" 200 -
+2026-07-18 16:22:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:22:33] "GET /api/security/alerts?limit=15 HTTP/1.1" 200 -
+2026-07-18 16:22:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:22:33] "GET /api/security/logs?page=1&per_page=15 HTTP/1.1" 200 -
+2026-07-18 16:22:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:22:33] "[33mGET /api/security/uploads/unknown_faces/unknown_fb34f43f.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:22:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:22:33] "[33mGET /api/security/uploads/unknown_faces/unknown_d2df440a.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:22:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:22:33] "[33mGET /api/security/uploads/unknown_faces/unknown_ca671a41.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:22:33 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:22:33] "[33mGET /api/security/uploads/unknown_faces/unknown_1f8eae8f.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:23:32 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:32] "GET /api/security/stats HTTP/1.1" 200 -
+2026-07-18 16:23:32 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:32] "GET /api/security/alerts?limit=15 HTTP/1.1" 200 -
+2026-07-18 16:23:32 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:32] "GET /api/security/logs?page=1&per_page=15 HTTP/1.1" 200 -
+2026-07-18 16:23:32 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:32] "[33mGET /api/security/uploads/unknown_faces/unknown_fb34f43f.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:23:32 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:32] "[33mGET /api/security/uploads/unknown_faces/unknown_d2df440a.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:23:32 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:32] "[33mGET /api/security/uploads/unknown_faces/unknown_ca671a41.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:23:32 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:32] "[33mGET /api/security/uploads/unknown_faces/unknown_1f8eae8f.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:23:35 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:35] "GET /api/security/stats HTTP/1.1" 200 -
+2026-07-18 16:23:35 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:35] "GET /api/security/alerts?limit=15 HTTP/1.1" 200 -
+2026-07-18 16:23:35 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:35] "GET /api/security/logs?page=1&per_page=15 HTTP/1.1" 200 -
+2026-07-18 16:23:35 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:35] "[33mGET /api/security/uploads/unknown_faces/unknown_fb34f43f.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:23:35 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:35] "[33mGET /api/security/uploads/unknown_faces/unknown_d2df440a.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:23:35 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:35] "[33mGET /api/security/uploads/unknown_faces/unknown_ca671a41.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:23:35 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:35] "[33mGET /api/security/uploads/unknown_faces/unknown_1f8eae8f.jpg HTTP/1.1[0m" 404 -
+2026-07-18 16:23:36 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:36] "GET / HTTP/1.1" 200 -
+2026-07-18 16:23:36 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:36] "GET /static/css/main.css HTTP/1.1" 200 -
+2026-07-18 16:23:36 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:36] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-18 16:23:36 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:36] "[36mGET /static/css/table.css HTTP/1.1[0m" 304 -
+2026-07-18 16:23:36 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:36] "GET /api/students?page=1&per_page=10 HTTP/1.1" 200 -
+2026-07-18 16:23:36 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:36] "GET /api/stats HTTP/1.1" 200 -
+2026-07-18 16:23:37 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:37] "GET /db-management HTTP/1.1" 200 -
+2026-07-18 16:23:37 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:37] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-18 16:23:37 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:37] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-18 16:23:37 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:37] "[36mGET /static/css/table.css HTTP/1.1[0m" 304 -
+2026-07-18 16:23:37 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:37] "GET /api/students?per_page=100 HTTP/1.1" 200 -
+2026-07-18 16:23:37 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:37] "GET /api/db/stats HTTP/1.1" 200 -
+2026-07-18 16:23:42 [INFO] backend.services.student_service – Student deleted: 312324104113
+2026-07-18 16:23:42 [INFO] backend.services.recognition_service – RecognitionService created.
+2026-07-18 16:23:42 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:42] "DELETE /api/students/312324104113 HTTP/1.1" 200 -
+2026-07-18 16:23:42 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:42] "GET /api/db/stats HTTP/1.1" 200 -
+2026-07-18 16:23:42 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:42] "GET /api/students?per_page=100 HTTP/1.1" 200 -
+2026-07-18 16:23:44 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:44] "GET /register HTTP/1.1" 200 -
+2026-07-18 16:23:45 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:45] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-18 16:23:45 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:45] "[36mGET /static/css/table.css HTTP/1.1[0m" 304 -
+2026-07-18 16:23:45 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:45] "[36mGET /static/css/register.css HTTP/1.1[0m" 304 -
+2026-07-18 16:23:45 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:45] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-18 16:23:45 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:23:45] "[36mGET /static/js/register.js HTTP/1.1[0m" 304 -
+2026-07-18 16:25:32 [INFO] backend.services.student_service – Student registered: Hemavathy P (312324104105)
+2026-07-18 16:25:32 [ERROR] backend.routes.student_routes – Failed to process QR email for 312324104105: No module named 'qrcode'
+2026-07-18 16:25:32 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:25:32] "[35m[1mPOST /api/students HTTP/1.1[0m" 201 -
+2026-07-18 16:25:40 [INFO] backend.routes.student_routes – Capture session started: c196d840-b537-4b76-9803-8608ac78be96 for student 312324104105
+2026-07-18 16:25:40 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:25:40] "POST /api/capture/start HTTP/1.1" 200 -
+2026-07-18 16:25:40 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:25:40] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:25:41 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:25:41] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:25:41 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:25:41] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:25:41 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:25:41] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:25:42 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:25:42] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:25:42 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:25:42] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:25:42 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:25:42] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:25:42 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:25:42] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:25:43 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:25:43] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:25:43 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:25:43] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:25:43 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:25:43] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:25:44 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:25:44] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:25:44 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:25:44] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:25:44 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:25:44] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:25:45 [INFO] backend.routes.student_routes – Capture complete: 15 frames for session c196d840-b537-4b76-9803-8608ac78be96
+2026-07-18 16:25:45 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:25:45] "POST /api/capture/upload-frame HTTP/1.1" 200 -
+2026-07-18 16:25:45 [INFO] backend.services.embedding_service – Loading InsightFace model 'buffalo_s' …
+2026-07-18 16:25:48 [INFO] backend.services.embedding_service – InsightFace model loaded successfully.
+2026-07-18 16:25:54 [INFO] backend.services.student_service – Embedding updated for student: 312324104105
+2026-07-18 16:25:54 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:25:54] "POST /api/embedding/generate HTTP/1.1" 200 -
+2026-07-18 16:52:39 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:52:39] "GET / HTTP/1.1" 200 -
+2026-07-18 16:52:39 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:52:39] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-18 16:52:39 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:52:39] "[36mGET /static/css/table.css HTTP/1.1[0m" 304 -
+2026-07-18 16:52:39 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:52:39] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-18 16:52:39 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:52:39] "GET /api/students?page=1&per_page=10 HTTP/1.1" 200 -
+2026-07-18 16:52:39 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:52:39] "GET /api/stats HTTP/1.1" 200 -
+2026-07-18 16:53:16 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:53:16] "GET /register HTTP/1.1" 200 -
+2026-07-18 16:53:16 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:53:16] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-18 16:53:16 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:53:16] "[36mGET /static/css/table.css HTTP/1.1[0m" 304 -
+2026-07-18 16:53:16 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:53:16] "[36mGET /static/css/register.css HTTP/1.1[0m" 304 -
+2026-07-18 16:53:16 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:53:16] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-18 16:53:16 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:53:16] "[36mGET /static/js/register.js HTTP/1.1[0m" 304 -
+2026-07-18 16:53:21 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:53:21] "GET / HTTP/1.1" 200 -
+2026-07-18 16:53:21 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:53:21] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-18 16:53:21 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:53:21] "[36mGET /static/css/table.css HTTP/1.1[0m" 304 -
+2026-07-18 16:53:21 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:53:21] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-18 16:53:21 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:53:21] "GET /api/students?page=1&per_page=10 HTTP/1.1" 200 -
+2026-07-18 16:53:21 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 16:53:21] "GET /api/stats HTTP/1.1" 200 -
+2026-07-18 17:19:14 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:19:14] "GET / HTTP/1.1" 200 -
+2026-07-18 17:19:14 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:19:14] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-18 17:19:14 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:19:14] "[36mGET /static/css/table.css HTTP/1.1[0m" 304 -
+2026-07-18 17:19:14 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:19:14] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-18 17:19:14 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:19:14] "GET /api/students?page=1&per_page=10 HTTP/1.1" 200 -
+2026-07-18 17:19:14 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:19:14] "GET /api/stats HTTP/1.1" 200 -
+2026-07-18 17:25:34 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:34] "GET /attendance HTTP/1.1" 200 -
+2026-07-18 17:25:34 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:34] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-18 17:25:34 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:34] "[36mGET /static/css/table.css HTTP/1.1[0m" 304 -
+2026-07-18 17:25:34 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:34] "GET /static/css/attendance.css HTTP/1.1" 200 -
+2026-07-18 17:25:34 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:34] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-18 17:25:34 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:34] "GET /static/js/attendance.js HTTP/1.1" 200 -
+2026-07-18 17:25:34 [INFO] backend.services.attendance_service – AttendanceService created.
+2026-07-18 17:25:34 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:34] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:25:37 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:37] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:25:39 [ERROR] backend.services.antispoof_service – Failed to load Anti-Spoofing model models/2.7_80x80_MiniFASNetV2.onnx: [ONNXRuntimeError] : 3 : NO_SUCHFILE : Load model from models/2.7_80x80_MiniFASNetV2.onnx failed:Load model models/2.7_80x80_MiniFASNetV2.onnx failed. File doesn't exist
+2026-07-18 17:25:39 [INFO] backend.services.detection_service – Loading YOLO model: yolo11n.pt
+2026-07-18 17:25:39 [INFO] backend.services.detection_service – YOLO model loaded successfully.
+2026-07-18 17:25:40 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:40] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:25:43 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:43] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:25:46 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:46] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:25:46 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:46] "POST /api/attendance/process-frame HTTP/1.1" 200 -
+2026-07-18 17:25:47 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:47] "POST /api/attendance/process-frame HTTP/1.1" 200 -
+2026-07-18 17:25:47 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:47] "POST /api/attendance/process-frame HTTP/1.1" 200 -
+2026-07-18 17:25:47 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:47] "POST /api/attendance/process-frame HTTP/1.1" 200 -
+2026-07-18 17:25:48 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:48] "POST /api/attendance/process-frame HTTP/1.1" 200 -
+2026-07-18 17:25:48 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:48] "POST /api/attendance/process-frame HTTP/1.1" 200 -
+2026-07-18 17:25:48 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:48] "POST /api/attendance/process-frame HTTP/1.1" 200 -
+2026-07-18 17:25:48 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:48] "POST /api/attendance/process-frame HTTP/1.1" 200 -
+2026-07-18 17:25:49 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:49] "POST /api/attendance/process-frame HTTP/1.1" 200 -
+2026-07-18 17:25:49 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:49] "POST /api/attendance/process-frame HTTP/1.1" 200 -
+2026-07-18 17:25:49 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:49] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:25:49 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:49] "POST /api/attendance/process-frame HTTP/1.1" 200 -
+2026-07-18 17:25:49 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:49] "POST /api/attendance/process-frame HTTP/1.1" 200 -
+2026-07-18 17:25:50 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:50] "POST /api/attendance/process-frame HTTP/1.1" 200 -
+2026-07-18 17:25:50 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:50] "POST /api/attendance/process-frame HTTP/1.1" 200 -
+2026-07-18 17:25:51 [INFO] backend.services.recognition_service – Loaded 2 student embeddings into memory cache.
+2026-07-18 17:25:51 [INFO] backend.services.cooldown_service – CooldownService created.
+2026-07-18 17:25:51 [INFO] backend.services.security_log_service – Security log: type=genuine decision=accepted student=312324104315
+2026-07-18 17:25:51 [ERROR] backend.services.audit_service – Failed to log event: (sqlite3.OperationalError) no such table: system_audit_log
+[SQL: INSERT INTO system_audit_log (event_type, description, timestamp) VALUES (?, ?, ?)]
+[parameters: ('UNKNOWN_PERSON', 'Unknown person detected with confidence 0.71', '2026-07-18 11:55:51.779733')]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-07-18 17:25:51 [INFO] backend.services.security_log_service – Security log: type=unknown_face decision=rejected student=unknown
+2026-07-18 17:25:51 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:51] "POST /api/attendance/process-frame HTTP/1.1" 200 -
+2026-07-18 17:25:52 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:52] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:25:54 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:54] "POST /api/attendance/process-frame HTTP/1.1" 200 -
+2026-07-18 17:25:54 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:54] "POST /api/attendance/process-frame HTTP/1.1" 200 -
+2026-07-18 17:25:54 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:54] "POST /api/attendance/process-frame HTTP/1.1" 200 -
+2026-07-18 17:25:54 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:54] "POST /api/attendance/process-frame HTTP/1.1" 200 -
+2026-07-18 17:25:55 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:55] "POST /api/attendance/process-frame HTTP/1.1" 200 -
+2026-07-18 17:25:55 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:55] "POST /api/attendance/process-frame HTTP/1.1" 200 -
+2026-07-18 17:25:55 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:55] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:25:55 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:55] "POST /api/attendance/process-frame HTTP/1.1" 200 -
+2026-07-18 17:25:56 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:56] "POST /api/attendance/process-frame HTTP/1.1" 200 -
+2026-07-18 17:25:56 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:56] "POST /api/attendance/process-frame HTTP/1.1" 200 -
+2026-07-18 17:25:56 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:56] "GET /qr-scanner HTTP/1.1" 200 -
+2026-07-18 17:25:56 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:56] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-18 17:25:56 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:56] "[36mGET /static/css/table.css HTTP/1.1[0m" 304 -
+2026-07-18 17:25:56 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:56] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-18 17:25:56 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:56] "POST /api/attendance/process-frame HTTP/1.1" 200 -
+2026-07-18 17:25:57 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:57] "GET /attendance HTTP/1.1" 200 -
+2026-07-18 17:25:57 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:57] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-18 17:25:57 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:57] "[36mGET /static/css/table.css HTTP/1.1[0m" 304 -
+2026-07-18 17:25:58 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:58] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-18 17:25:58 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:58] "[36mGET /static/css/attendance.css HTTP/1.1[0m" 304 -
+2026-07-18 17:25:58 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:58] "[36mGET /static/js/attendance.js HTTP/1.1[0m" 304 -
+2026-07-18 17:25:58 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:58] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:25:59 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:59] "GET /qr-scanner HTTP/1.1" 200 -
+2026-07-18 17:25:59 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:59] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+2026-07-18 17:25:59 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:59] "[36mGET /static/css/table.css HTTP/1.1[0m" 304 -
+2026-07-18 17:25:59 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:25:59] "[36mGET /static/js/main.js HTTP/1.1[0m" 304 -
+2026-07-18 17:26:10 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:26:10] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:26:13 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:26:13] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:26:16 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:26:16] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:26:19 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:26:19] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:26:22 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:26:22] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:26:25 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:26:25] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:26:28 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:26:28] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:26:31 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:26:31] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:26:34 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:26:34] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:26:37 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:26:37] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:26:40 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:26:40] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:26:43 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:26:43] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:26:46 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:26:46] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:26:49 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:26:49] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:26:52 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:26:52] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:26:55 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:26:55] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:26:58 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:26:58] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:27:01 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:27:01] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:27:04 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:27:04] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:27:07 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:27:07] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:27:10 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:27:10] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:27:13 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:27:13] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:27:16 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:27:16] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:27:19 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:27:19] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:27:22 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:27:22] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:27:25 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:27:25] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:27:28 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:27:28] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:27:31 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:27:31] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:27:34 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:27:34] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:27:37 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:27:37] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:27:40 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:27:40] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:27:43 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:27:43] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:27:46 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:27:46] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:27:49 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:27:49] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:27:52 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:27:52] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:27:55 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:27:55] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:27:58 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:27:58] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:28:01 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:28:01] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:28:04 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:28:04] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:28:07 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:28:07] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:28:10 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:28:10] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:28:13 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:28:13] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:28:16 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:28:16] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:28:19 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:28:19] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:28:22 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:28:22] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:28:25 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:28:25] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:28:28 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:28:28] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:28:31 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:28:31] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:28:34 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:28:34] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:28:37 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:28:37] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:28:40 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:28:40] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:28:43 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:28:43] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:28:46 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:28:46] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:28:49 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:28:49] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:28:52 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:28:52] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:28:55 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:28:55] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:28:58 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:28:58] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:29:01 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:29:01] "GET /api/attendance/live HTTP/1.1" 200 -
+2026-07-18 17:29:04 [INFO] werkzeug – 127.0.0.1 - - [18/Jul/2026 17:29:04] "GET /api/attendance/live HTTP/1.1" 200 -

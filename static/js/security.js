@@ -167,7 +167,7 @@ async function fetchLogs(page = 1) {
             if (log.snapshot_path) {
                 // Fix Windows backslashes which can cause invalid escape sequence errors in JS event handlers
                 const safePath = log.snapshot_path.replace(/\\/g, '/');
-                snapshotHtml = `<img src="/api/security/uploads/${safePath}" alt="Snapshot" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px; cursor: pointer;" onclick="window.open('/api/security/uploads/${safePath}', '_blank')">`;
+                snapshotHtml = `<img src="/api/security/uploads/${safePath}" alt="Snapshot" style="width: 40px; height: 40px; object-fit: cover; border-radius: 4px; cursor: pointer;" onerror="this.onerror=null; this.outerHTML='<span class=\\'text-muted small\\' title=\\'Image deleted\\'>—</span>';" onclick="window.open('/api/security/uploads/${safePath}', '_blank')">`;
             }
 
             return `

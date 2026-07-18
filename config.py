@@ -11,7 +11,21 @@ from pathlib import Path
 # ─── Base Paths ───────────────────────────────────────────────────────────────
 BASE_DIR = Path(__file__).resolve().parent
 
-
+# ── Load Environment Variables ────────────────────────────────────────────────
+try:
+    from dotenv import load_dotenv
+    load_dotenv(dotenv_path=BASE_DIR / ".env")
+except ImportError:
+    # Fallback parser if python-dotenv is not installed
+    env_file = BASE_DIR / ".env"
+    if env_file.exists():
+        with open(env_file, "r") as f:
+            for line in f:
+                line = line.strip()
+                if line and not line.startswith("#"):
+                    if "=" in line:
+                        key, val = line.split("=", 1)
+                        os.environ[key.strip()] = val.strip().strip("'\"")
 class Config:
     """Base configuration shared across all environments."""
 
