@@ -7,33 +7,33 @@
 /* ─── CSS Custom Properties ──────────────────────────────────────────────── */
 :root {
   /* Brand Palette */
-  --brand-primary:     #6366f1;   /* Indigo */
-  --brand-primary-dk:  #4f46e5;
-  --brand-accent:      #a855f7;   /* Violet */
-  --brand-accent-dk:   #9333ea;
-  --brand-success:     #22c55e;
+  --brand-primary:     #4f46e5;   /* Indigo */
+  --brand-primary-dk:  #4338ca;
+  --brand-accent:      #8b5cf6;   /* Violet */
+  --brand-accent-dk:   #7c3aed;
+  --brand-success:     #10b981;
   --brand-warning:     #f59e0b;
   --brand-danger:      #ef4444;
-  --brand-info:        #06b6d4;
+  --brand-info:        #0ea5e9;
 
-  /* Background */
-  --bg-base:       #0a0b1a;
-  --bg-layer1:     #0f1029;
-  --bg-layer2:     #141530;
-  --bg-layer3:     #1a1b3e;
-  --bg-card:       rgba(20, 21, 48, 0.75);
-  --bg-sidebar:    rgba(12, 13, 28, 0.95);
+  /* Background (SaaS Light) */
+  --bg-base:       #f8fafc;
+  --bg-layer1:     #f1f5f9;
+  --bg-layer2:     #e2e8f0;
+  --bg-layer3:     #cbd5e1;
+  --bg-card:       #ffffff;
+  --bg-sidebar:    #ffffff;
 
   /* Glass / Border */
-  --glass-bg:      rgba(255, 255, 255, 0.04);
-  --glass-border:  rgba(255, 255, 255, 0.08);
-  --glass-blur:    20px;
+  --glass-bg:      #ffffff;
+  --glass-border:  #e2e8f0;
+  --glass-blur:    0px;
 
   /* Text */
-  --text-primary:  #f1f5f9;
-  --text-secondary:#94a3b8;
+  --text-primary:  #0f172a;
+  --text-secondary:#334155;
   --text-muted:    #64748b;
-  --text-label:    #cbd5e1;
+  --text-label:    #475569;
 
   /* Sidebar */
   --sidebar-w:     260px;
@@ -43,22 +43,22 @@
   --topbar-h:      64px;
 
   /* Gradients */
-  --grad-primary:  linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-  --grad-success:  linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+  --grad-primary:  linear-gradient(135deg, #4f46e5 0%, #8b5cf6 100%);
+  --grad-success:  linear-gradient(135deg, #10b981 0%, #059669 100%);
   --grad-warning:  linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  --grad-info:     linear-gradient(135deg, #06b6d4 0%, #0284c7 100%);
-  --grad-card-bdr: linear-gradient(135deg, rgba(99,102,241,0.3) 0%, rgba(168,85,247,0.15) 100%);
+  --grad-info:     linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  --grad-card-bdr: linear-gradient(135deg, rgba(79,70,229,0.1) 0%, rgba(139,92,246,0.1) 100%);
 
   /* Radius */
-  --r-sm:   8px;
-  --r-md:   12px;
-  --r-lg:   18px;
-  --r-xl:   24px;
+  --r-sm:   6px;
+  --r-md:   10px;
+  --r-lg:   12px;
+  --r-xl:   16px;
   --r-pill: 9999px;
 
   /* Shadow */
-  --shadow-card: 0 4px 32px rgba(0,0,0,0.4);
-  --shadow-glow: 0 0 24px rgba(99,102,241,0.25);
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --shadow-glow: 0 10px 15px -3px rgba(79, 70, 229, 0.2);
 
   /* Transitions */
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
@@ -79,9 +79,6 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   line-height: 1.6;
-  background-image:
-    radial-gradient(ellipse at 20% 10%, rgba(99,102,241,0.12) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 80%, rgba(168,85,247,0.10) 0%, transparent 50%);
 }
 
 a { text-decoration: none; color: inherit; }
@@ -260,7 +257,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   position: sticky;
   top: 0;
   height: var(--topbar-h);
-  background: rgba(10, 11, 26, 0.85);
+  background: rgba(255, 255, 255, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--glass-border);
@@ -284,7 +281,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   color: var(--text-secondary);
   transition: all var(--duration) var(--ease);
 }
-.sidebar-toggle:hover { color: var(--text-primary); background: rgba(99,102,241,0.15); }
+.sidebar-toggle:hover { color: var(--text-primary); background: rgba(79,70,229,0.1); }
 
 .topbar-breadcrumb { display: flex; align-items: center; gap: 8px; }
 .breadcrumb-home { color: var(--text-muted); font-size: 0.875rem; }
@@ -323,8 +320,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .search-input::placeholder { color: var(--text-muted); }
 .search-input:focus {
   border-color: var(--brand-primary);
-  background: rgba(99,102,241,0.08);
-  box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(79,70,229,0.15);
 }
 
 .topbar-icon-btn {
@@ -338,7 +335,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   color: var(--text-secondary);
   transition: all var(--duration) var(--ease);
 }
-.topbar-icon-btn:hover { color: var(--text-primary); background: rgba(99,102,241,0.15); }
+.topbar-icon-btn:hover { color: var(--text-primary); background: rgba(79,70,229,0.1); }
 
 .notif-dot {
   position: absolute;
@@ -360,7 +357,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   font-size: 1.3rem;
   color: var(--brand-primary);
 }
-.topbar-avatar:hover { background: rgba(99,102,241,0.12); border-color: var(--brand-primary); }
+.topbar-avatar:hover { background: rgba(79,70,229,0.1); border-color: var(--brand-primary); }
 .avatar-label { font-size: 0.8rem; font-weight: 600; color: var(--text-secondary); }
 
 /* ─── Page Content ───────────────────────────────────────────────────────── */
@@ -408,8 +405,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 .glass-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 40px rgba(0,0,0,0.6), 0 0 20px rgba(99,102,241,0.15);
-  border-color: rgba(99,102,241,0.3);
+  box-shadow: 0 12px 20px -8px rgba(0,0,0,0.1), 0 0 12px rgba(79,70,229,0.1);
+  border-color: rgba(79,70,229,0.2);
 }
 .glass-card::before {
   content: '';
@@ -434,7 +431,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 0.02em;
-  box-shadow: 0 4px 16px rgba(99,102,241,0.4);
+  box-shadow: 0 4px 12px rgba(79,70,229,0.25);
   transition: all var(--duration) var(--ease);
   border: none;
   cursor: pointer;
@@ -442,7 +439,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 .btn-primary-gradient:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 24px rgba(99,102,241,0.55);
+  box-shadow: 0 6px 16px rgba(79,70,229,0.35);
 }
 .btn-primary-gradient:active { transform: translateY(0); }
 .btn-primary-gradient:disabled {

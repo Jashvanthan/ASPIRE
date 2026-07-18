@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+{% block title %}Database Management - SmartAttend{% endblock %}
+{% block breadcrumb %}DB Manager{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 class="page-title"><i class="bi bi-database-fill-gear me-2 text-primary"></i>Database Manager</h1>
+    <p class="page-subtitle">Monitor database statistics, view records, and perform maintenance tasks.</p>
+  </div>
+</div>
+
+<!-- Stats Row -->
+<div class="stats-grid mb-4">
+  <div class="stat-card stat-card--primary">
+    <div class="stat-card-icon"><i class="bi bi-people-fill"></i></div>
+    <div class="stat-card-body">
+      <span class="stat-value" id="cntStudents">-</span>
+      <span class="stat-label">Total Students</span>
+    </div>
+  </div>
+  <div class="stat-card stat-card--success">
+    <div class="stat-card-icon"><i class="bi bi-calendar-check-fill"></i></div>
+    <div class="stat-card-body">
+      <span class="stat-value" id="cntAttendance">-</span>
+      <span class="stat-label">Attendance Logs</span>
+    </div>
+  </div>
+  <div class="stat-card stat-card--warning">
+    <div class="stat-card-icon"><i class="bi bi-shield-lock-fill"></i></div>
+    <div class="stat-card-body">
+      <span class="stat-value" id="cntSecurity">-</span>
+      <span class="stat-label">Security Logs</span>
+    </div>
+  </div>
+  <div class="stat-card stat-card--info">
+    <div class="stat-card-icon"><i class="bi bi-hdd-fill"></i></div>
+    <div class="stat-card-body">
+      <span class="stat-value" id="dbSize">-</span>
+      <span class="stat-label">Database File Size</span>
+    </div>
+  </div>
+</div>
+
+<div class="row g-4">
+  <!-- Left: Database Records Viewer -->
+  <div class="col-lg-8">
+    <div class="glass-card mb-4" style="padding: 24px;">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="section-title mb-0"><i class="bi bi-people me-2 text-primary"></i>Registered Students List</h3>
+        <div class="table-search-wrapper">
+          <i class="bi bi-search table-search-icon"></i>
+          <input type="text" id="dbStudentSearch" class="table-search-input" placeholder="Search students..." />
+        </div>
+      </div>
+      
+      <div class="table-responsive">
+        <table class="table table-hover table-sm border align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>Full Name</th>
+              <th>Dept / Year</th>
+              <th>Email</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="dbStudentsTableBody">
+            <tr>
+              <td colspan="5" class="text-center text-muted py-3">Loading students...</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: Maintenance & Danger Zone -->
+  <div class="col-lg-4">
+    <div class="glass-card" style="padding: 24px; border-color: rgba(239, 68, 68, 0.2);">
+      <h3 class="section-title text-danger mb-3"><i class="bi bi-exclamation-triangle-fill me-2"></i>Danger Zone</h3>
+      <p class="text-muted small">These actions are destructive and cannot be undone. Please use with caution.</p>
+      
+      <div class="d-flex flex-column gap-3 mt-4">
+        <div>
+          <button class="btn btn-outline-danger w-100 text-start" id="clearAttendanceBtn">
+            <i class="bi bi-calendar-x me-2"></i>Clear Attendance Logs
+          </button>
+          <span class="text-muted x-small d-block mt-1">Deletes all historical attendance markings. Keeps student profiles.</span>
+        </div>
+        
+        <div>
+          <button class="btn btn-outline-danger w-100 text-start" id="clearSecurityBtn">
+            <i class="bi bi-shield-x me-2"></i>Clear Security Logs
+          </button>
+          <span class="text-muted x-small d-block mt-1">Deletes all liveness/anti-spoof records and saved threat snapshots.</span>
+        </div>
+        
+        <hr class="my-2" style="border-top: 1px dashed var(--glass-border);">
+        
+        <div>
+          <button class="btn btn-danger w-100 text-start" id="factoryResetBtn">
+            <i class="bi bi-trash3-fill me-2"></i>Full Factory Reset
+          </button>
+          <span class="text-muted x-small d-block mt-1">Wipes students, face images, embeddings, attendance, and logs completely.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    loadStats();
+    loadStudents();
+
+    document.getElementById('dbStudentSearch').addEventListener('input', (e) => {
+        filterStudents(e.target.value);
+    });
+
+    document.getElementById('clearAttendanceBtn').addEventListener('click', () => confirmClear('clear_attendance'));
+    document.getElementById('clearSecurityBtn').addEventListener('click', () => confirmClear('clear_security'));
+    document.getElementById('factoryResetBtn').addEventListener('click', () => confirmClear('factory_reset'));
+});
+
+let allStudents = [];
+
+async function loadStats() {
+    try {
+        const res = await fetch('/api/db/stats');
+        const data = await res.json();
+        if (data.success) {
+            document.getElementById('cntStudents').textContent = data.stats.students;
+            document.getElementById('cntAttendance').textContent = data.stats.attendance;
+            document.getElementById('cntSecurity').textContent = data.stats.security_logs;
+            document.getElementById('dbSize').textContent = data.stats.db_size;
+        }
+    } catch (err) {
+        console.error('Failed to load database stats', err);
+    }
+}
+
+async function loadStudents() {
+    try {
+        const res = await fetch('/api/students?per_page=100');
+        const data = await res.json();
+        allStudents = data.students || [];
+        renderStudents(allStudents);
+    } catch (err) {
+        console.error('Failed to load students', err);
+        document.getElementById('dbStudentsTableBody').innerHTML = `
+            <tr><td colspan="5" class="text-center text-danger">Failed to load students.</td></tr>
+        `;
+    }
+}
+
+function renderStudents(students) {
+    const tbody = document.getElementById('dbStudentsTableBody');
+    if (students.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="5" class="text-center text-muted py-3">No student records found.</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = students.map(s => `
+        <tr>
+            <td><strong>${s.student_id}</strong></td>
+            <td>${s.full_name}</td>
+            <td><span class="badge bg-secondary">${s.department} (${s.year} yr)</span></td>
+            <td>${s.email}</td>
+            <td class="text-end">
+                <button class="btn btn-sm btn-outline-danger py-0 px-2" onclick="deleteStudent('${s.student_id}')">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </td>
+        </tr>
+    `).join('');
+}
+
+function filterStudents(query) {
+    const filtered = allStudents.filter(s => 
+        s.student_id.toLowerCase().includes(query.toLowerCase()) ||
+        s.full_name.toLowerCase().includes(query.toLowerCase()) ||
+        s.department.toLowerCase().includes(query.toLowerCase()) ||
+        s.email.toLowerCase().includes(query.toLowerCase())
+    );
+    renderStudents(filtered);
+}
+
+async function deleteStudent(studentId) {
+    if (!confirm(`Are you sure you want to delete student ID ${studentId} and all their registered face data?`)) return;
+    try {
+        const res = await fetch(`/api/students/${studentId}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (res.ok) {
+            window.SmartAttend.success('Success', data.message);
+            loadStats();
+            loadStudents();
+        } else {
+            window.SmartAttend.error('Failed', data.error);
+        }
+    } catch (err) {
+        window.SmartAttend.error('Error', 'Failed to delete student.');
+    }
+}
+
+async function confirmClear(action) {
+    let msg = '';
+    if (action === 'clear_attendance') msg = 'Are you sure you want to delete ALL attendance logs? This cannot be undone.';
+    if (action === 'clear_security') msg = 'Are you sure you want to delete ALL security alerts and logs? This cannot be undone.';
+    if (action === 'factory_reset') msg = '⚠️ WARNING: This will delete ALL students, embeddings, attendance, security logs and face images. Full Factory Reset. Are you absolutely sure?';
+    
+    if (!confirm(msg)) return;
+    
+    try {
+        const res = await fetch('/api/db/clear', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ action })
+        });
+        const data = await res.json();
+        if (data.success) {
+            window.SmartAttend.success('Database Cleared', data.message);
+            loadStats();
+            loadStudents();
+        } else {
+            window.SmartAttend.error('Reset Failed', data.message);
+        }
+    } catch (err) {
+        window.SmartAttend.error('Reset Error', 'An error occurred while resetting the database.');
+    }
+}
+</script>
+<style>
+.x-small { font-size: 0.75rem; }
+</style>
+{% endblock %}

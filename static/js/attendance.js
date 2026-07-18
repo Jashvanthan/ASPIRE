@@ -58,6 +58,9 @@ const state = {
     // FPS tracking
     fpsFrameCount   : 0,
     fpsLastTime     : performance.now(),
+    // QR tracking
+    lastScannedQR   : null,
+    lastScannedTime : 0
 };
 
 /* ── DOM References ──────────────────────────────────────────────────────── */
@@ -295,8 +298,44 @@ async function detectCurrentFrame() {
     updateFooterCounters();
 
     try {
-        const captureCtx = captureCanvas.getContext('2d');
+        const captureCtx = captureCanvas.getContext('2d', { willReadFrequently: true });
         captureCtx.drawImage(videoEl, 0, 0, captureCanvas.width, captureCanvas.height);
+        
+        // --- SEAMLESS QR SCANNING ---
+        const qrToggle = $('qrModeToggle');
+        if (qrToggle && qrToggle.checked && typeof jsQR !== 'undefined') {
+            const nowTime = Date.now();
+            if (nowTime - state.lastScannedTime > 3000) { // Don't spam scan the same QR
+                const imgData = captureCtx.getImageData(0, 0, captureCanvas.width, captureCanvas.height);
+                const code = jsQR(imgData.data, imgData.width, imgData.height, { inversionAttempts: "dontInvert" });
+                if (code && code.data) {
+                    const studentId = code.data.trim();
+                    state.lastScannedQR = studentId;
+                    state.lastScannedTime = nowTime;
+                    addEventToLog({ label: `QR Scanned: ${studentId}`, color: 'blue', conf: null });
+                    
+                    // Mark attendance via QR
+                    fetch('/api/attendance/qr-mark', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ student_id: studentId })
+                    })
+                    .then(r => r.json())
+                    .then(d => {
+                        if (d.success) {
+                            window.SmartAttend?.success('QR Unlocked', `${studentId} verified. Face tracking unlocked.`);
+                            addEventToLog({ label: `QR Unlock Success: ${studentId}`, color: 'green', conf: null });
+                        } else {
+                            window.SmartAttend?.error('QR Failed', d.message || 'Invalid QR code.');
+                            addEventToLog({ label: `QR Invalid: ${studentId}`, color: 'red', conf: null });
+                        }
+                    })
+                    .catch(e => console.error("QR mark error", e));
+                }
+            }
+        }
+        // -----------------------------
+
         const frameB64 = captureCanvas.toDataURL('image/jpeg', 0.75);
 
         const res = await fetch(API.PROCESS_FRAME, {

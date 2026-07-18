@@ -32,6 +32,7 @@ from flask import (
 
 from backend.services.student_service import StudentService
 from backend.services.face_service import FaceService
+from backend.database.db import db
 
 logger = logging.getLogger(__name__)
 
@@ -80,6 +81,12 @@ def register():
 def my_qr_page():
     """Render the student QR code generation page."""
     return render_template("my_qr.html")
+
+
+@student_bp.route("/qr-scanner")
+def qr_scanner_page():
+    """Render the QR Code scanner page."""
+    return render_template("qr_scanner.html")
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -134,7 +141,7 @@ def create_student():
 
     return jsonify({
         "student": student.to_dict(),
-        "message": f"Student '{student.full_name}' registered successfully!",
+        "message": f"Student '{student.full_name}' registered! Your 2FA QR code has been emailed to you.",
     }), 201
 
 
@@ -215,6 +222,96 @@ def delete_student(student_id: str):
         logger.error(f"Failed to invalidate recognition cache: {e}")
 
     return jsonify({"message": f"Student '{student_id}' deleted successfully."}), 200
+
+
+@student_bp.route("/db-management")
+def db_management_page():
+    """Render the Database Management / Admin UI."""
+    return render_template("db_management.html")
+
+
+@student_bp.route("/api/db/stats", methods=["GET"])
+def get_db_stats():
+    """Retrieve db metrics like row counts and sizes."""
+    from backend.models.student import Student
+    from backend.models.attendance import Attendance
+    from backend.models.security_log import SecurityLog
+    import os
+    
+    db_path = current_app.config.get("SQLALCHEMY_DATABASE_URI").replace("sqlite:///", "")
+    db_size_kb = 0
+    if os.path.exists(db_path):
+        db_size_kb = os.path.getsize(db_path) / 1024
+        
+    stats = {
+        "students": Student.query.count(),
+        "attendance": Attendance.query.count(),
+        "security_logs": SecurityLog.query.count(),
+        "db_size": f"{db_size_kb:.2f} KB"
+    }
+    return jsonify({"success": True, "stats": stats})
+
+
+@student_bp.route("/api/db/clear", methods=["POST"])
+def clear_db():
+    """Clear selected table(s) or factory reset."""
+    action = request.json.get("action")
+    
+    from backend.models.student import Student
+    from backend.models.attendance import Attendance
+    from backend.models.security_log import SecurityLog
+    import shutil
+    import os
+    
+    try:
+        if action == "clear_attendance":
+            Attendance.query.delete()
+            db.session.commit()
+            return jsonify({"success": True, "message": "Attendance records cleared successfully."})
+            
+        elif action == "clear_security":
+            SecurityLog.query.delete()
+            db.session.commit()
+            return jsonify({"success": True, "message": "Security logs cleared successfully."})
+            
+        elif action == "factory_reset":
+            # Delete database records
+            Attendance.query.delete()
+            SecurityLog.query.delete()
+            Student.query.delete()
+            db.session.commit()
+            
+            # Wiping upload directories
+            face_img_dir = current_app.config.get("FACE_IMAGES_FOLDER")
+            emb_dir = current_app.config.get("EMBEDDINGS_FOLDER")
+            sec_snap_dir = current_app.config.get("SECURITY_SNAPSHOTS_FOLDER")
+            unk_faces_dir = current_app.config.get("UNKNOWN_FACES_FOLDER")
+            
+            for folder in [face_img_dir, emb_dir, sec_snap_dir, unk_faces_dir]:
+                if folder and os.path.exists(folder):
+                    try:
+                        shutil.rmtree(folder)
+                    except:
+                        pass
+                    os.makedirs(folder, exist_ok=True)
+                    
+            # Invalidate recognition cache
+            try:
+                from backend.services.recognition_service import get_recognition_service
+                rec_svc = get_recognition_service()
+                rec_svc.invalidate_cache()
+            except:
+                pass
+                
+            return jsonify({"success": True, "message": "Full system reset completed successfully."})
+            
+        else:
+            return jsonify({"success": False, "message": "Invalid action."}), 400
+            
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Failed to clear db: {e}")
+        return jsonify({"success": False, "message": str(e)}), 500
 
 
 @student_bp.route("/api/students", methods=["GET"])

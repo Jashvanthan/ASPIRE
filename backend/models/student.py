@@ -59,6 +59,28 @@ class Student(db.Model):
         onupdate=lambda: datetime.now(timezone.utc),
         nullable=False
     )
+    last_qr_scan_time = db.Column(
+        db.DateTime,
+        nullable=True
+    )
+
+    def is_face_tracking_unlocked(self, cooldown_minutes=40) -> bool:
+        """
+        Check if the student scanned their QR code within the cooldown period.
+        SQLite stores datetimes as naive (no tzinfo), so we compare naive UTC.
+        """
+        if not self.last_qr_scan_time:
+            return False
+
+        # last_qr_scan_time from SQLite is naive — compare to naive UTC now
+        scan_time = self.last_qr_scan_time
+        if scan_time.tzinfo is not None:
+            # Already timezone-aware, strip to naive for consistent subtraction
+            scan_time = scan_time.replace(tzinfo=None)
+
+        now = datetime.utcnow()  # naive UTC
+        diff = now - scan_time
+        return diff.total_seconds() <= (cooldown_minutes * 60)
 
     # ── Embedding Helpers ─────────────────────────────────────────────────────
 

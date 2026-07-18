@@ -34,7 +34,11 @@
     <button type="button" class="btn-outline-danger d-none" id="stopBtn">
       <i class="bi bi-stop-circle-fill me-2"></i>Stop Camera
     </button>
-    <div class="att-cam-status" id="cameraStatusText">
+    <div class="form-check form-switch ms-3 d-flex align-items-center">
+      <input class="form-check-input me-2" type="checkbox" role="switch" id="qrModeToggle" checked style="transform: scale(1.2);">
+      <label class="form-check-label fw-bold text-primary" for="qrModeToggle">Enable QR Scanner</label>
+    </div>
+    <div class="att-cam-status ms-2" id="cameraStatusText">
       <i class="bi bi-circle-fill me-1 text-danger" style="font-size: 0.55rem; vertical-align: middle;"></i>
       Camera offline
     </div>
@@ -255,6 +259,7 @@
 
 {% block scripts %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
 <script>
     window.CAMERA_FPS = {{ fps|default(10) }};
 </script>

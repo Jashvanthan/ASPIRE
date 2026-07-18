@@ -136,6 +136,14 @@ def create_app(env: str = None) -> Flask:
         except Exception as e:
             app.logger.warning(f"Could not auto-apply Phase 5 migrations: {e}")
 
+        # Auto-apply Phase 6 migrations if needed
+        try:
+            from backend.database.migrate_phase6 import run_migration as run_phase6
+            run_phase6()
+            app.logger.info("Phase 6 schema migrations checked/applied.")
+        except Exception as e:
+            app.logger.warning(f"Could not auto-apply Phase 6 migrations: {e}")
+
     # ── Blueprints ────────────────────────────────────────────────────────────
     app.register_blueprint(student_bp)
     app.register_blueprint(attendance_bp)

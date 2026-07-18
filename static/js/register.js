@@ -230,7 +230,7 @@ form.addEventListener('submit', async (e) => {
   window.SmartAttend.success('Student Saved', data.message);
   registerBtn.disabled = true;
   openCamBtn.disabled  = false;
-  showStatus('✅ Student saved! Now click "Open Camera" to capture your face.', 'success');
+  showStatus('✅ Student saved & QR code emailed! Now click "Open Camera" to capture your face.', 'success');
 });
 
 function setLoading(btn, loading) {

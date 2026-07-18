@@ -1,0 +1,343 @@
+{% extends "base.html" %}
+{% block title %}QR Scanner - SmartAttend{% endblock %}
+{% block breadcrumb %}QR Scanner{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 class="page-title"><i class="bi bi-qr-code-scan me-2 text-primary"></i>QR Code Scanner</h1>
+    <p class="page-subtitle">Scan a student's QR code to verify identity and mark attendance manually.</p>
+  </div>
+</div>
+
+<div class="row g-4 justify-content-center">
+  <!-- Scanner Panel -->
+  <div class="col-lg-6">
+    <div class="glass-card" style="padding:24px;">
+      
+      <!-- Mode Tabs -->
+      <div class="d-flex gap-2 mb-4">
+        <button id="tabCamera" class="btn btn-primary flex-fill active" onclick="switchTab('camera')">
+          <i class="bi bi-camera-fill me-2"></i>Live Camera
+        </button>
+        <button id="tabUpload" class="btn btn-outline-secondary flex-fill" onclick="switchTab('upload')">
+          <i class="bi bi-image me-2"></i>Upload Image
+        </button>
+      </div>
+
+      <!-- Camera Tab -->
+      <div id="cameraTab">
+        <div id="cameraPlaceholder" class="text-center py-5">
+          <i class="bi bi-qr-code-scan" style="font-size:3rem;color:var(--text-muted);"></i>
+          <p class="text-muted mt-3">Click "Start Scanner" to activate camera</p>
+          <button class="btn btn-primary mt-2" id="startCamBtn" onclick="startCamera()">
+            <i class="bi bi-camera me-2"></i>Start Scanner
+          </button>
+        </div>
+
+        <div id="cameraView" style="display:none; position:relative;">
+          <video id="qrVideo" autoplay playsinline muted
+            style="width:100%; border-radius:12px; background:#000; max-height:350px; object-fit:cover;"></video>
+          <canvas id="qrCanvas" style="display:none;"></canvas>
+          <!-- Scan overlay -->
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none;">
+            <div style="width:200px;height:200px;border:3px solid #6366f1;border-radius:12px;box-shadow:0 0 0 9999px rgba(0,0,0,0.45);animation:pulse 1.5s infinite;"></div>
+          </div>
+          <div class="text-center mt-3">
+            <button class="btn btn-sm btn-outline-danger" onclick="stopCamera()">
+              <i class="bi bi-x-circle me-1"></i>Stop Camera
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upload Tab -->
+      <div id="uploadTab" style="display:none;">
+        <label for="qrImageInput" class="upload-drop-zone w-100" id="dropZone"
+          style="display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px dashed var(--glass-border);border-radius:12px;padding:40px;cursor:pointer;transition:border-color 0.2s;">
+          <i class="bi bi-cloud-upload" style="font-size:2.5rem;color:var(--text-muted);"></i>
+          <p class="mt-2 text-muted">Click to select or drag & drop an image</p>
+          <p class="text-muted small">Works with screenshots, photos from phone, WhatsApp images etc.</p>
+          <input type="file" id="qrImageInput" accept="image/*" style="display:none;" onchange="scanUploadedImage(event)"/>
+        </label>
+        <div id="uploadPreview" style="display:none;" class="mt-3 text-center">
+          <img id="uploadedImg" style="max-width:100%;max-height:250px;border-radius:8px;border:1px solid var(--glass-border);" />
+        </div>
+      </div>
+
+      <!-- Scan Status -->
+      <div id="scanStatus" class="mt-3" style="display:none;">
+        <div class="alert alert-info py-2 d-flex align-items-center gap-2">
+          <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+          <span id="scanStatusText">Scanning…</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Result Panel -->
+  <div class="col-lg-5">
+    <div class="glass-card" style="padding:24px;min-height:300px;display:flex;flex-direction:column;justify-content:center;">
+      
+      <!-- Empty state -->
+      <div id="resultEmpty" class="text-center py-4">
+        <i class="bi bi-person-bounding-box" style="font-size:3rem;color:var(--text-muted);"></i>
+        <p class="text-muted mt-3">Scan a QR code to see student information here.</p>
+      </div>
+
+      <!-- Error state -->
+      <div id="resultError" style="display:none;" class="text-center py-4">
+        <i class="bi bi-x-octagon-fill text-danger" style="font-size:3rem;"></i>
+        <h4 class="mt-3 text-danger">QR Not Recognized</h4>
+        <p class="text-muted" id="resultErrorMsg">No valid student QR code found.</p>
+        <button class="btn btn-outline-secondary btn-sm mt-2" onclick="resetResult()">Try Again</button>
+      </div>
+
+      <!-- Success state -->
+      <div id="resultCard" style="display:none;">
+        <div class="text-center mb-4">
+          <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);display:flex;align-items:center;justify-content:center;margin:0 auto;">
+            <i class="bi bi-person-fill" style="font-size:1.8rem;color:#fff;"></i>
+          </div>
+        </div>
+        <table class="table table-sm">
+          <tbody>
+            <tr><td class="text-muted fw-semibold" style="width:40%">Student ID</td><td id="rStudentId" class="fw-bold text-primary"></td></tr>
+            <tr><td class="text-muted fw-semibold">Full Name</td><td id="rFullName" class="fw-semibold"></td></tr>
+            <tr><td class="text-muted fw-semibold">Department</td><td id="rDepartment"></td></tr>
+            <tr><td class="text-muted fw-semibold">Year / Section</td><td id="rYearSection"></td></tr>
+            <tr><td class="text-muted fw-semibold">Email</td><td id="rEmail" style="font-size:0.85rem;"></td></tr>
+            <tr><td class="text-muted fw-semibold">Today's Status</td><td id="rStatus"></td></tr>
+          </tbody>
+        </table>
+        <div class="d-grid gap-2 mt-3">
+          <button class="btn btn-success" id="markAttendanceBtn" onclick="markAttendance()">
+            <i class="bi bi-check-circle-fill me-2"></i>Mark Present
+          </button>
+          <button class="btn btn-outline-secondary" onclick="resetResult()">
+            <i class="bi bi-arrow-repeat me-2"></i>Scan Another
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<style>
+@keyframes pulse {
+  0%,100% { box-shadow: 0 0 0 9999px rgba(0,0,0,0.45), 0 0 0 0 rgba(99,102,241,0.7); }
+  50% { box-shadow: 0 0 0 9999px rgba(0,0,0,0.45), 0 0 0 8px rgba(99,102,241,0); }
+}
+#dropZone:hover { border-color: #6366f1 !important; }
+</style>
+{% endblock %}
+
+{% block scripts %}
+<!-- jsQR for QR decoding -->
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+<script>
+let videoStream = null;
+let scanInterval = null;
+let currentStudentId = null;
+let scanning = true;
+
+// ── Tab switching ────────────────────────────────────────────────────────────
+function switchTab(tab) {
+  stopCamera();
+  document.getElementById('cameraTab').style.display = tab === 'camera' ? '' : 'none';
+  document.getElementById('uploadTab').style.display = tab === 'upload' ? '' : 'none';
+  document.getElementById('tabCamera').className = tab === 'camera' ? 'btn btn-primary flex-fill' : 'btn btn-outline-secondary flex-fill';
+  document.getElementById('tabUpload').className = tab === 'upload' ? 'btn btn-primary flex-fill' : 'btn btn-outline-secondary flex-fill';
+  resetResult();
+}
+
+// ── Camera Scanner ───────────────────────────────────────────────────────────
+async function startCamera() {
+  try {
+    videoStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } }
+    });
+    const video = document.getElementById('qrVideo');
+    video.srcObject = videoStream;
+    document.getElementById('cameraPlaceholder').style.display = 'none';
+    document.getElementById('cameraView').style.display = '';
+    scanning = true;
+    scanInterval = setInterval(scanVideoFrame, 300);
+  } catch (err) {
+    showScanError('Camera access denied. Please allow camera permission and try again.');
+  }
+}
+
+function stopCamera() {
+  if (scanInterval) { clearInterval(scanInterval); scanInterval = null; }
+  if (videoStream) { videoStream.getTracks().forEach(t => t.stop()); videoStream = null; }
+  document.getElementById('cameraPlaceholder').style.display = '';
+  document.getElementById('cameraView').style.display = 'none';
+}
+
+function scanVideoFrame() {
+  if (!scanning) return;
+  const video = document.getElementById('qrVideo');
+  if (video.readyState !== video.HAVE_ENOUGH_DATA) return;
+  const canvas = document.getElementById('qrCanvas');
+  canvas.width = video.videoWidth;
+  canvas.height = video.videoHeight;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  const code = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: 'dontInvert' });
+  if (code && code.data) {
+    scanning = false;
+    clearInterval(scanInterval);
+    lookupStudent(code.data.trim());
+  }
+}
+
+// ── Image Upload Scanner ─────────────────────────────────────────────────────
+function scanUploadedImage(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const img = document.getElementById('uploadedImg');
+    img.src = e.target.result;
+    document.getElementById('uploadPreview').style.display = '';
+    const image = new Image();
+    image.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = image.width;
+      canvas.height = image.height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(image, 0, 0);
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+      const code = jsQR(imageData.data, imageData.width, imageData.height, { inversionAttempts: 'attemptBoth' });
+      if (code && code.data) {
+        lookupStudent(code.data.trim());
+      } else {
+        showScanError('No QR code found in the image. Please try a clearer image.');
+      }
+    };
+    image.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// Drag and drop
+document.getElementById('dropZone').addEventListener('dragover', (e) => { e.preventDefault(); e.currentTarget.style.borderColor = '#6366f1'; });
+document.getElementById('dropZone').addEventListener('dragleave', (e) => { e.currentTarget.style.borderColor = 'var(--glass-border)'; });
+document.getElementById('dropZone').addEventListener('drop', (e) => {
+  e.preventDefault();
+  e.currentTarget.style.borderColor = 'var(--glass-border)';
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) {
+    const input = document.getElementById('qrImageInput');
+    const dt = new DataTransfer();
+    dt.items.add(file);
+    input.files = dt.files;
+    scanUploadedImage({ target: input });
+  }
+});
+
+// ── Student Lookup ───────────────────────────────────────────────────────────
+async function lookupStudent(studentId) {
+  resetResult();
+  document.getElementById('scanStatus').style.display = '';
+  document.getElementById('scanStatusText').textContent = `Found QR: ${studentId} — Looking up student…`;
+  
+  try {
+    const res = await fetch(`/api/students/${studentId}`);
+    if (!res.ok) {
+      showScanError(`No student found with ID: "${studentId}". Is this a valid SmartAttend QR code?`);
+      return;
+    }
+    const data = await res.json();
+    const s = data.student;
+    currentStudentId = s.student_id;
+    showStudentResult(s);
+  } catch (err) {
+    showScanError('Network error. Could not reach the server.');
+  } finally {
+    document.getElementById('scanStatus').style.display = 'none';
+  }
+}
+
+function showStudentResult(s) {
+  document.getElementById('resultEmpty').style.display = 'none';
+  document.getElementById('resultError').style.display = 'none';
+  document.getElementById('rStudentId').textContent = s.student_id;
+  document.getElementById('rFullName').textContent = s.full_name;
+  document.getElementById('rDepartment').textContent = s.department;
+  document.getElementById('rYearSection').textContent = `Year ${s.year} / Section ${s.section}`;
+  document.getElementById('rEmail').textContent = s.email;
+  
+  // Fetch today status
+  document.getElementById('rStatus').innerHTML = '<span class="badge bg-secondary">Checking…</span>';
+  fetch(`/api/attendance/student/${s.student_id}/today`).then(r => r.json()).then(a => {
+    if (a.present) {
+      document.getElementById('rStatus').innerHTML = `<span class="badge bg-success">Present</span> <small class="text-muted">${a.time || ''}</small>`;
+      document.getElementById('markAttendanceBtn').disabled = true;
+      document.getElementById('markAttendanceBtn').textContent = '✅ Already Marked Present';
+    } else {
+      document.getElementById('rStatus').innerHTML = '<span class="badge bg-warning text-dark">Absent</span>';
+      document.getElementById('markAttendanceBtn').disabled = false;
+    }
+  }).catch(() => {
+    document.getElementById('rStatus').innerHTML = '<span class="badge bg-secondary">Unknown</span>';
+  });
+
+  document.getElementById('resultCard').style.display = '';
+}
+
+function showScanError(msg) {
+  document.getElementById('resultEmpty').style.display = 'none';
+  document.getElementById('resultCard').style.display = 'none';
+  document.getElementById('resultErrorMsg').textContent = msg;
+  document.getElementById('resultError').style.display = '';
+  scanning = true; // re-enable scanning
+  if (videoStream) { scanInterval = setInterval(scanVideoFrame, 300); }
+}
+
+function resetResult() {
+  currentStudentId = null;
+  scanning = true;
+  document.getElementById('resultEmpty').style.display = '';
+  document.getElementById('resultError').style.display = 'none';
+  document.getElementById('resultCard').style.display = 'none';
+  document.getElementById('uploadPreview').style.display = 'none';
+  const input = document.getElementById('qrImageInput');
+  if (input) input.value = '';
+  if (videoStream && !scanInterval) { scanInterval = setInterval(scanVideoFrame, 300); }
+}
+
+// ── Mark Attendance ──────────────────────────────────────────────────────────
+async function markAttendance() {
+  if (!currentStudentId) return;
+  const btn = document.getElementById('markAttendanceBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Marking…';
+  try {
+    const res = await fetch('/api/attendance/qr-mark', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ student_id: currentStudentId })
+    });
+    const data = await res.json();
+    if (res.ok && data.success) {
+      document.getElementById('rStatus').innerHTML = `<span class="badge bg-success">Present</span> <small class="text-muted">${data.time || 'Now'}</small>`;
+      btn.innerHTML = '✅ Marked Present';
+      window.SmartAttend?.success('Attendance Marked', `${currentStudentId} has been marked present.`);
+    } else {
+      window.SmartAttend?.error('Failed', data.message || 'Could not mark attendance.');
+      btn.disabled = false;
+      btn.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i>Mark Present';
+    }
+  } catch (err) {
+    window.SmartAttend?.error('Error', 'Network error while marking attendance.');
+    btn.disabled = false;
+    btn.innerHTML = '<i class="bi bi-check-circle-fill me-2"></i>Mark Present';
+  }
+}
+</script>
+{% endblock %}

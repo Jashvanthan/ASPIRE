@@ -68,6 +68,7 @@ class Config:
     # ── Pipeline & Performance ────────────────────────────────────────────
     DETECTION_COOLDOWN_SECONDS: int = 30       # Security logs cooldown
     PROCESS_EVERY_N_FRAMES: int = 15           # Limit heavy ML models for ~2 FPS
+    ATTENDANCE_COOLDOWN_MINUTES: int = 40      # Cooldown between face-tracking attendance marks
 
 
     # ── Email / SMTP ──────────────────────────────────────────────────────────

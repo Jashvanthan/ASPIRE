@@ -82,6 +82,12 @@
           <span class="nav-label">Live Attendance</span>
         </a>
       </li>
+      <li class="nav-item {% if request.path == '/qr-scanner' %}active{% endif %}">
+        <a href="/qr-scanner" class="nav-link text-info">
+          <i class="bi bi-qr-code-scan nav-icon"></i>
+          <span class="nav-label">QR Scanner</span>
+        </a>
+      </li>
       {% endif %}
       
       {% if current_role == 'student' %}
@@ -101,6 +107,12 @@
         <a href="{{ url_for('security.security_dashboard') }}" class="nav-link">
           <i class="bi bi-shield-lock-fill nav-icon"></i>
           <span class="nav-label">Security</span>
+        </a>
+      </li>
+      <li class="nav-item {% if request.path == '/db-management' %}active{% endif %}">
+        <a href="/db-management" class="nav-link">
+          <i class="bi bi-database-fill-gear nav-icon"></i>
+          <span class="nav-label">DB Manager</span>
         </a>
       </li>
       <li class="nav-item disabled">
@@ -170,7 +182,7 @@
           <i class="bi bi-person-circle"></i>
           <span class="avatar-label">{{ current_role|title }}</span>
         </div>
-        <ul class="dropdown-menu dropdown-menu-end dropdown-menu-dark" style="background: rgba(15,15,30,0.95); border: 1px solid rgba(255,255,255,0.1); margin-top: 10px;">
+        <ul class="dropdown-menu dropdown-menu-end" style="background: #ffffff; border: 1px solid var(--glass-border); box-shadow: var(--shadow-card); margin-top: 10px;">
           <li><h6 class="dropdown-header" style="color: var(--text-muted);">Switch Role</h6></li>
           <li><a class="dropdown-item {% if current_role == 'admin' %}active{% endif %}" href="/set_role/admin"><i class="bi bi-shield-lock me-2"></i>Admin</a></li>
           <li><a class="dropdown-item {% if current_role == 'staff' %}active{% endif %}" href="/set_role/staff"><i class="bi bi-person-badge me-2"></i>Staff</a></li>

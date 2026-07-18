@@ -87,8 +87,9 @@ async function fetchAdvancedAnalytics() {
 }
 
 function initCharts(data) {
-    Chart.defaults.color = '#adb5bd';
-    Chart.defaults.scale.grid.color = 'rgba(255, 255, 255, 0.1)';
+    Chart.defaults.color = '#64748b';
+    Chart.defaults.scale.grid.color = 'rgba(0, 0, 0, 0.05)';
+    Chart.defaults.font.family = "'Inter', sans-serif";
 
     const commonOptions = {
         responsive: true,
@@ -96,12 +97,12 @@ function initCharts(data) {
         plugins: { 
             legend: { 
                 position: 'bottom',
-                labels: { color: '#adb5bd' }
+                labels: { color: '#475569', usePointStyle: true, boxWidth: 8 }
             } 
         },
         scales: {
-            x: { stacked: true },
-            y: { stacked: true }
+            x: { stacked: true, grid: { display: false } },
+            y: { stacked: true, border: { display: false } }
         }
     };
 
@@ -117,12 +118,16 @@ function initCharts(data) {
                 {
                     label: 'Present',
                     data: defaultTrend.map(d => d.present),
-                    backgroundColor: '#198754', // success green
+                    backgroundColor: 'rgba(16, 185, 129, 0.85)', // var(--brand-success)
+                    borderRadius: 4,
+                    barPercentage: 0.5
                 },
                 {
                     label: 'Absent',
                     data: defaultTrend.map(d => d.absent),
-                    backgroundColor: '#dc3545', // danger red
+                    backgroundColor: 'rgba(239, 68, 68, 0.85)', // var(--brand-danger)
+                    borderRadius: 4,
+                    barPercentage: 0.5
                 }
             ]
         },
@@ -153,12 +158,16 @@ function initCharts(data) {
                 {
                     label: 'Present',
                     data: data.department.map(d => d.present),
-                    backgroundColor: '#0d6efd',
+                    backgroundColor: 'rgba(79, 70, 229, 0.85)', // var(--brand-primary)
+                    borderRadius: 4,
+                    barPercentage: 0.5
                 },
                 {
                     label: 'Absent',
                     data: data.department.map(d => d.absent),
-                    backgroundColor: '#dc3545',
+                    backgroundColor: 'rgba(239, 68, 68, 0.85)',
+                    borderRadius: 4,
+                    barPercentage: 0.5
                 }
             ]
         },
@@ -184,12 +193,16 @@ function initCharts(data) {
                 {
                     label: 'Present',
                     data: data.class_data.map(d => d.present),
-                    backgroundColor: '#0dcaf0',
+                    backgroundColor: 'rgba(14, 165, 233, 0.85)', // var(--brand-info)
+                    borderRadius: 4,
+                    barPercentage: 0.5
                 },
                 {
                     label: 'Absent',
                     data: data.class_data.map(d => d.absent),
-                    backgroundColor: '#dc3545',
+                    backgroundColor: 'rgba(239, 68, 68, 0.85)',
+                    borderRadius: 4,
+                    barPercentage: 0.5
                 }
             ]
         },

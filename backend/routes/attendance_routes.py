@@ -92,6 +92,21 @@ def process_frame():
     qr_data, _, _ = qr_detector.detectAndDecode(frame)
     qr_data = qr_data.strip() if qr_data else None
     
+    # ── 1.6 QR-First Activation ───────────────────────────────────────────
+    # If a QR code is detected, try to activate the student for face tracking
+    qr_activated_student_id = None
+    if qr_data:
+        from backend.models.student import Student
+        qr_student = Student.query.filter_by(student_id=qr_data).first()
+        if qr_student:
+            was_new = att_svc.activate_via_qr(qr_data)
+            qr_activated_student_id = qr_data
+            if was_new:
+                # Mark first attendance immediately via QR
+                student_dict = qr_student.to_dict()
+                success, msg, color, att_id = att_svc.mark_attendance(student_dict, 1.0)
+                logger.info(f"QR first attendance for {qr_data}: {msg}")
+    
     # ── 2. Process Each Tracked Person ──────────────────────────────────
     for person in tracked_people:
         track_id = person.get("track_id")
@@ -140,7 +155,15 @@ def process_frame():
                 # Check 2FA
                 det["two_factor_verified"] = bool(qr_data and qr_data.lower() == student["student_id"].lower())
                 
-                if not cached_data["marked_attendance"]:
+                # ── QR-First Gate: Check if student is QR-activated today ──
+                is_activated = att_svc.is_qr_activated(student["student_id"])
+                
+                if not is_activated:
+                    # Student has NOT scanned QR today → block face-only attendance
+                    det["status_color"] = "orange"
+                    det["label"] = f"{student['full_name']} — QR Required"
+                    det["qr_required"] = True
+                elif not cached_data["marked_attendance"]:
                     if duration >= verification_seconds:
                         success, msg, color, att_id = att_svc.mark_attendance(student, cached_data["sim"])
                         
@@ -246,8 +269,16 @@ def process_frame():
                 # Check 2FA
                 det["two_factor_verified"] = bool(qr_data and qr_data.lower() == student["student_id"].lower())
                 
-                det["status_color"] = "yellow"
-                det["label"] = f"Verifying {student['full_name']}... (10s)"
+                # ── QR-First Gate ──
+                is_activated = att_svc.is_qr_activated(student["student_id"])
+                
+                if not is_activated:
+                    det["status_color"] = "orange"
+                    det["label"] = f"{student['full_name']} — QR Required"
+                    det["qr_required"] = True
+                else:
+                    det["status_color"] = "yellow"
+                    det["label"] = f"Verifying {student['full_name']}... (10s)"
                 
                 # Log Genuine Attempt to Security Dashboard
                 from backend.services.cooldown_service import get_cooldown_service
@@ -454,3 +485,48 @@ def approve_correction():
         db.session.rollback()
         logger.error(f"Correction approval failed: {e}")
         return jsonify({"success": False, "error": str(e)}), 500
+
+@attendance_bp.route("/api/attendance/qr-mark", methods=["POST"])
+def qr_mark():
+    """
+    Endpoint hit by the QR scanner to mark a student's QR scan.
+    Marks attendance as Present AND unlocks their Face Tracking session for 40 minutes.
+    """
+    data = request.get_json(silent=True) or {}
+    student_id = data.get("student_id")
+    
+    if not student_id:
+        return jsonify({"success": False, "message": "No student ID provided"}), 400
+        
+    from backend.models.student import Student
+    from datetime import datetime, timezone
+    
+    student = Student.query.filter_by(student_id=student_id).first()
+    if not student:
+        return jsonify({"success": False, "message": "Student not found"}), 404
+        
+    try:
+        # 1. Update QR scan time to unlock face tracking for 40 min
+        now = datetime.now(timezone.utc)
+        student.last_qr_scan_time = now
+        db.session.commit()
+        
+        # 2. Activate QR session in the in-memory service set
+        att_svc = get_attendance_service()
+        att_svc.activate_qr(student_id)  # marks them as QR-activated today
+        
+        # 3. Mark attendance using the correct signature: mark_attendance(student_dict, confidence)
+        student_dict = student.to_dict()
+        success, message, color, att_id = att_svc.mark_attendance(student_dict, 1.0)
+        
+        return jsonify({
+            "success": True,
+            "already_marked": not success,
+            "time": now.strftime("%H:%M:%S"),
+            "message": message if not success else "Attendance marked via QR scan ✓"
+        }), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        logger.error(f"Failed to record QR scan: {e}")
+        return jsonify({"success": False, "message": f"Internal error: {e}"}), 500

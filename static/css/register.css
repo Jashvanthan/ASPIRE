@@ -29,14 +29,14 @@
 .form-card-icon {
   width: 48px; height: 48px;
   border-radius: var(--r-lg);
-  background: rgba(99,102,241,0.15);
+  background: rgba(79,70,229,0.1);
   color: var(--brand-primary);
   display: flex; align-items: center; justify-content: center;
   font-size: 1.3rem;
   flex-shrink: 0;
 }
 .form-card-icon--purple {
-  background: rgba(168,85,247,0.15);
+  background: rgba(139,92,246,0.1);
   color: var(--brand-accent);
 }
 
@@ -88,7 +88,7 @@
 
 .form-control-custom {
   width: 100%;
-  background: rgba(255,255,255,0.04);
+  background: var(--bg-layer1);
   border: 1px solid var(--glass-border);
   border-radius: var(--r-md);
   padding: 11px 14px 11px 40px;
@@ -103,8 +103,8 @@
 
 .form-control-custom:focus {
   border-color: var(--brand-primary);
-  background: rgba(99,102,241,0.08);
-  box-shadow: 0 0 0 4px rgba(99,102,241,0.2);
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(79,70,229,0.15);
   transform: translateY(-1px);
 }
 
