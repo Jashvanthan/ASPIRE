@@ -1,0 +1,28 @@
+# Environment and IDE
+.env
+.idea/
+.vscode/
+__pycache__/
+*.pyc
+
+# Virtual Environment
+.venv/
+venv/
+ENV/
+
+# Databases and Local Storage
+database/*.db
+database/*.sqlite3
+
+# Uploads & User Data
+uploads/
+datasets/
+
+# AI Models (large binaries)
+models/
+*.pt
+*.onnx
+
+# Logs
+logs/
+*.log

@@ -1,126 +1,261 @@
 {% extends "base.html" %}
 {% block title %}Live Attendance - SmartAttend{% endblock %}
+{% block breadcrumb %}Live Attendance{% endblock %}
 
 {% block head_extra %}
 <link rel="stylesheet" href="{{ url_for('static', filename='css/attendance.css') }}" />
 {% endblock %}
 
 {% block content %}
+<!-- ═══════════════════════════════════════════════════════════════════
+     LIVE ATTENDANCE PAGE
+═══════════════════════════════════════════════════════════════════ -->
+
+<!-- Page Header -->
 <div class="page-header">
   <div>
     <h1 class="page-title">Live Attendance</h1>
-    <p class="page-subtitle">Real-time object detection powered by YOLOv11n.</p>
+    <p class="page-subtitle">Real-time face recognition powered by YOLOv11n + ArcFace + MiniFASNet anti-spoofing.</p>
+  </div>
+  <div class="d-flex align-items-center gap-3">
+    <div class="att-session-badge" id="sessionBadge">
+      <span class="session-dot" id="sessionDot"></span>
+      <span id="sessionLabel">Session Offline</span>
+    </div>
   </div>
 </div>
 
-<div class="attendance-container">
-  <!-- Controls Panel -->
-  <div class="glass-card controls-card">
-    <div class="d-flex justify-content-between align-items-center">
-      <div>
-        <h3 class="mb-1" style="font-size: 1rem; color: var(--text-primary);">Camera Controls</h3>
-        <p class="mb-0 text-muted" style="font-size: 0.85rem;" id="cameraStatusText">Camera is offline</p>
-      </div>
-      <div class="d-flex gap-2">
-        <button type="button" class="btn-primary-gradient" id="startBtn">
-          <i class="bi bi-camera-video-fill me-2"></i> Start Camera
-        </button>
-        <button type="button" class="btn-outline-danger d-none" id="stopBtn">
-          <i class="bi bi-stop-circle-fill me-2"></i> Stop
-        </button>
-      </div>
+<!-- ── Controls Bar ───────────────────────────────────────────────── -->
+<div class="att-controls-bar glass-card mb-4">
+  <div class="att-controls-left">
+    <button type="button" class="btn-primary-gradient" id="startBtn">
+      <i class="bi bi-camera-video-fill me-2"></i>Start Camera
+    </button>
+    <button type="button" class="btn-outline-danger d-none" id="stopBtn">
+      <i class="bi bi-stop-circle-fill me-2"></i>Stop Camera
+    </button>
+    <div class="att-cam-status" id="cameraStatusText">
+      <i class="bi bi-circle-fill me-1 text-danger" style="font-size: 0.55rem; vertical-align: middle;"></i>
+      Camera offline
     </div>
   </div>
+  <div class="att-controls-right">
+    <div class="att-meta-chip">
+      <i class="bi bi-clock me-1"></i>
+      <span id="currentTime">00:00:00</span>
+    </div>
+    <div class="att-meta-chip">
+      <i class="bi bi-camera-fill me-1"></i>
+      <span id="objectCount">0</span> detected
+    </div>
+    <div class="att-meta-chip" id="fpsChip">
+      <i class="bi bi-speedometer2 me-1"></i>
+      <span id="fpsDisplay">0</span> fps
+    </div>
+  </div>
+</div>
 
-  <!-- Main Feed Area -->
-<div class="row g-4">
-  <!-- Left Column: Video Feed -->
-  <div class="col-lg-8">
-    <div class="glass-card mb-4">
-      <div class="feed-header d-flex justify-content-between align-items-center mb-3">
-        <h3 class="mb-0" style="font-size: 1rem; color: var(--text-primary);">Live Detection Feed</h3>
-        <div class="detection-stats">
-          <span class="badge-custom me-2">
-            <i class="bi bi-clock-history me-1"></i>
-            <span id="currentTime">00:00:00</span>
-          </span>
-          <span class="badge-custom">
-            <i class="bi bi-people-fill me-1"></i>
-            <span id="objectCount">0</span> Detected
-          </span>
+<!-- ── 3-Column Main Layout ───────────────────────────────────────── -->
+<div class="att-main-grid">
+
+  <!-- ── LEFT: Video Feed ─────────────────────────────────────────── -->
+  <div class="att-col-video">
+    <div class="glass-card att-video-card">
+      <div class="att-card-header">
+        <div class="att-card-title">
+          <i class="bi bi-camera-video-fill text-primary me-2"></i>
+          Live Detection Feed
+        </div>
+        <div class="att-live-indicator d-none" id="liveIndicator">
+          <span class="live-pulse"></span>
+          <span>LIVE</span>
         </div>
       </div>
-      
-      <div class="video-container position-relative bg-dark rounded overflow-hidden" style="aspect-ratio: 16/9;">
-        <div id="videoPlaceholder" class="d-flex flex-column justify-content-center align-items-center h-100 text-muted">
-          <i class="bi bi-camera-video-off" style="font-size: 3rem;"></i>
-          <p class="mt-2">Camera is offline</p>
+
+      <!-- Video + Canvas Stack -->
+      <div class="att-video-container" id="videoContainer">
+        <!-- Offline Placeholder -->
+        <div class="att-video-placeholder" id="videoPlaceholder">
+          <div class="att-placeholder-inner">
+            <i class="bi bi-camera-video-off"></i>
+            <p>Camera is offline</p>
+            <span>Click "Start Camera" to begin attendance session</span>
+          </div>
         </div>
-        
-        <!-- Live stream via getUserMedia -->
-        <video
-          id="webcamVideo"
-          class="position-absolute w-100 h-100 top-0 start-0"
-          style="object-fit: cover;"
-          autoplay
-          playsinline
-          muted
-        ></video>
-        
-        <!-- Bounding Box Display Canvas -->
-        <canvas
-          id="displayCanvas"
-          class="position-absolute w-100 h-100 top-0 start-0 d-none"
-        ></canvas>
-        
-        <!-- Hidden Capture Canvas (Used for generating Base64 frames) -->
+
+        <!-- Video Element (getUserMedia) -->
+        <video id="webcamVideo" class="att-video-el" autoplay playsinline muted></video>
+
+        <!-- Overlay Canvas (bounding boxes + labels) -->
+        <canvas id="displayCanvas" class="att-canvas-overlay d-none"></canvas>
+
+        <!-- Hidden capture canvas -->
         <canvas id="captureCanvas" class="d-none"></canvas>
       </div>
+
+      <!-- Video Footer Stats -->
+      <div class="att-video-footer">
+        <div class="att-vf-stat">
+          <span class="att-vf-label">Frames Sent</span>
+          <span class="att-vf-val" id="framesSent">0</span>
+        </div>
+        <div class="att-vf-stat">
+          <span class="att-vf-label">Faces Found</span>
+          <span class="att-vf-val" id="facesFound">0</span>
+        </div>
+        <div class="att-vf-stat">
+          <span class="att-vf-label">Marked Today</span>
+          <span class="att-vf-val text-success" id="markedToday">0</span>
+        </div>
+        <div class="att-vf-stat">
+          <span class="att-vf-label">Rejected</span>
+          <span class="att-vf-val text-danger" id="rejectedCount">0</span>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Right Column: Live Stats Panel -->
-  <div class="col-lg-4">
-    <div class="glass-card h-100 d-flex flex-column">
-      <h3 class="mb-4" style="font-size: 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
-        <i class="bi bi-activity text-success me-2"></i>Live Session
-      </h3>
-      
-      <div class="row g-2 mb-4">
-        <div class="col-6">
-          <div class="stat-box p-3 rounded" style="background: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.2);">
-            <div class="text-muted small">Present Today</div>
-            <div class="fs-3 fw-bold text-success" id="livePresentCount">0</div>
-          </div>
+  <!-- ── CENTER: Recognition Event Feed ──────────────────────────── -->
+  <div class="att-col-events">
+    <div class="glass-card att-events-card">
+      <div class="att-card-header">
+        <div class="att-card-title">
+          <i class="bi bi-activity text-success me-2"></i>
+          Recognition Events
         </div>
-        <div class="col-6">
-          <div class="stat-box p-3 rounded" style="background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);">
-            <div class="text-muted small">Total Registered</div>
-            <div class="fs-3 fw-bold" id="liveTotalCount">0</div>
+        <button class="att-clear-btn" id="clearEventsBtn" title="Clear event log">
+          <i class="bi bi-trash3"></i>
+        </button>
+      </div>
+
+      <!-- Last Recognized Card -->
+      <div class="att-last-recognized d-none" id="lastRecognizedCard">
+        <div class="att-lr-avatar" id="lrAvatar">?</div>
+        <div class="att-lr-info">
+          <div class="att-lr-name" id="lrName">—</div>
+          <div class="att-lr-meta" id="lrMeta">—</div>
+        </div>
+        <div class="att-lr-badge" id="lrBadge">—</div>
+      </div>
+
+      <!-- Liveness + Confidence Panel -->
+      <div class="att-liveness-panel d-none" id="livenessPanel">
+        <div class="att-lp-row">
+          <span class="att-lp-label">
+            <i class="bi bi-shield-check me-1"></i>Liveness
+          </span>
+          <div class="att-lp-bar-wrap">
+            <div class="att-lp-bar" id="livenessBar" style="width: 0%"></div>
+          </div>
+          <span class="att-lp-val" id="livenessVal">0%</span>
+        </div>
+        <div class="att-lp-row">
+          <span class="att-lp-label">
+            <i class="bi bi-person-check me-1"></i>Confidence
+          </span>
+          <div class="att-lp-bar-wrap">
+            <div class="att-lp-bar att-lp-bar--conf" id="confBar" style="width: 0%"></div>
+          </div>
+          <span class="att-lp-val" id="confVal">0%</span>
+        </div>
+        <div class="att-lp-row">
+          <span class="att-lp-label">
+            <i class="bi bi-exclamation-triangle me-1"></i>Anti-Spoof
+          </span>
+          <div class="att-spoof-chip" id="spoofChip">
+            <i class="bi bi-check-circle-fill me-1"></i>Genuine
           </div>
         </div>
       </div>
-      
-      <h4 class="mb-3" style="font-size: 0.9rem; color: var(--text-muted);">Latest Attendees</h4>
-      <div id="latestAttendeesList" class="flex-grow-1 overflow-auto" style="max-height: 400px;">
-        <div class="text-center text-muted small py-4">Waiting for detections...</div>
+
+      <!-- Event Log -->
+      <div class="att-events-header">
+        <span class="att-events-title-sm">Activity Log</span>
+        <span class="att-events-count" id="eventsCount">0 events</span>
+      </div>
+      <div class="att-event-log" id="eventLog">
+        <div class="att-event-empty" id="eventEmpty">
+          <i class="bi bi-hourglass"></i>
+          <p>Waiting for detections…</p>
+        </div>
       </div>
     </div>
   </div>
-</div>
-    
-    <div class="mt-3">
-      <p class="text-muted" style="font-size: 0.8rem;">
-        <i class="bi bi-info-circle me-1"></i> Frames are processed locally and bounding boxes are rendered by YOLOv11n on the server.
-      </p>
+
+  <!-- ── RIGHT: Session Stats + Present List ──────────────────────── -->
+  <div class="att-col-stats">
+
+    <!-- Session Summary Card -->
+    <div class="glass-card att-session-card mb-3">
+      <div class="att-card-header">
+        <div class="att-card-title">
+          <i class="bi bi-bar-chart-fill text-warning me-2"></i>
+          Today's Summary
+        </div>
+        <button class="att-refresh-btn" id="refreshStatsBtn" title="Refresh stats">
+          <i class="bi bi-arrow-clockwise"></i>
+        </button>
+      </div>
+
+      <div class="att-stats-grid">
+        <div class="att-stat-box att-stat-box--green">
+          <div class="att-stat-val" id="livePresentCount">0</div>
+          <div class="att-stat-lbl">Present</div>
+        </div>
+        <div class="att-stat-box att-stat-box--red">
+          <div class="att-stat-val" id="liveAbsentCount">0</div>
+          <div class="att-stat-lbl">Absent</div>
+        </div>
+        <div class="att-stat-box att-stat-box--blue">
+          <div class="att-stat-val" id="liveTotalCount">0</div>
+          <div class="att-stat-lbl">Total</div>
+        </div>
+        <div class="att-stat-box att-stat-box--purple">
+          <div class="att-stat-val" id="liveAttPct">0%</div>
+          <div class="att-stat-lbl">Rate</div>
+        </div>
+      </div>
+
+      <!-- Mini Donut Chart -->
+      <div class="att-donut-wrap">
+        <canvas id="miniDonut" width="120" height="120"></canvas>
+        <div class="att-donut-label">
+          <div class="att-donut-pct" id="donutPct">0%</div>
+          <div class="att-donut-sub">Attendance</div>
+        </div>
+      </div>
     </div>
+
+    <!-- Present Today List -->
+    <div class="glass-card att-present-card">
+      <div class="att-card-header">
+        <div class="att-card-title">
+          <i class="bi bi-people-fill text-success me-2"></i>
+          Present Today
+        </div>
+      </div>
+      <div class="att-present-list" id="latestAttendeesList">
+        <div class="att-event-empty">
+          <i class="bi bi-person-check"></i>
+          <p>No attendance recorded yet.</p>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
+
+<!-- Info footer -->
+<div class="att-footer-info mt-3">
+  <i class="bi bi-info-circle me-1"></i>
+  Frames are captured locally via browser camera and sent to the server for YOLOv11n detection → ArcFace recognition → MiniFASNet anti-spoofing. A 10-second verification window ensures accuracy.
+</div>
+
 {% endblock %}
 
 {% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
 <script>
-    // Configured target framerate from backend
     window.CAMERA_FPS = {{ fps|default(10) }};
 </script>
 <script src="{{ url_for('static', filename='js/attendance.js') }}"></script>

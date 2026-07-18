@@ -5,10 +5,14 @@ SQLAlchemy ORM model for the Attendance table.
 """
 
 from datetime import datetime, timezone
+from sqlalchemy import UniqueConstraint
 from backend.database.db import db
 
 class Attendance(db.Model):
     __tablename__ = "attendance"
+    __table_args__ = (
+        UniqueConstraint("student_id", "date", name="uq_student_date"),
+    )
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     student_id = db.Column(db.String(50), nullable=False, index=True)
